@@ -1,6 +1,6 @@
 # attendance-app
 
-A Clojure library designed to ... well, that part is up to you.
+Attendace Application built in Clojure
 
 ## Usage
 
