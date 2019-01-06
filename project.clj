@@ -17,7 +17,7 @@
                       "advanced-build" ^{:doc "Recompile code for production using :advanced compilation."}
                                    ["do" "clean"
                                     ["with-profile" "advanced" "cljsbuild" "once"]]}
-            :jvm-opts []
+            :jvm-opts ["-XX:+IgnoreUnrecognizedVMOptions"]
             :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.18"]
                                             [cider/piggieback "0.3.10"] [http-kit "2.3.0"]]
                              :source-paths ["src" "env/dev"]
