@@ -3,12 +3,13 @@
             :url "http://example.com/FIXME"
             :license {:name "Eclipse Public License"
                       :url  "http://www.eclipse.org/legal/epl-v10.html"}
-            :dependencies [[org.clojure/clojure "1.9.0"]
+            :dependencies [[org.clojure/clojure "1.10.0"]
                            [org.clojure/clojurescript "1.10.339"]
+                           [com.bhauman/rebel-readline "0.1.4"]
                            [reagent "0.8.1" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
 [re-frame "0.10.6"]]
             :plugins [[lein-cljsbuild "1.1.4"]
-                      [lein-figwheel "0.5.16"]]
+                      [lein-figwheel "0.5.18"]]
             :clean-targets ["target/" "index.ios.js" "index.android.js" #_($PLATFORM_CLEAN$)]
             :aliases {"prod-build" ^{:doc "Recompile code with prod profile."}
                                    ["do" "clean"
@@ -17,13 +18,13 @@
                                    ["do" "clean"
                                     ["with-profile" "advanced" "cljsbuild" "once"]]}
             :jvm-opts []
-            :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.14"]
-                                            [com.cemerick/piggieback "0.2.1"]]
+            :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.18"]
+                                            [cider/piggieback "0.3.10"] [http-kit "2.3.0"]]
                              :source-paths ["src" "env/dev"]
                              :cljsbuild    {:builds [
                                                      {:id           "ios"
                                                       :source-paths ["src" "env/dev"]
-                                                      :figwheel     true
+                                                      :figwheel     { :websocket-host "localhost" }
                                                       :compiler     {:output-to     "target/ios/index.js"
                                                                      :main          "env.ios.main"
                                                                      :output-dir    "target/ios"
@@ -31,14 +32,14 @@
                                                                      :target :nodejs}}
                                                      {:id           "android"
                                                       :source-paths ["src" "env/dev"]
-                                                      :figwheel     true
+                                                      :figwheel     { :websocket-host "localhost" }
                                                       :compiler     {:output-to     "target/android/index.js"
                                                                      :main          "env.android.main"
                                                                      :output-dir    "target/android"
                                                                      :optimizations :none
                                                                      :target :nodejs}}
 #_($DEV_PROFILES$)]}
-                             :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
+                             :repl-options {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}}
                        :prod {:cljsbuild {:builds [
                                                    {:id           "ios"
                                                     :source-paths ["src" "env/prod"]
