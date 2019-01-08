@@ -20,23 +20,32 @@
 
 (defn alert [title] (.alert (.-Alert ReactNative) title))
 
-(defn attendant-row [{:id id :first-name first-name :last-name last-name}]
-  [view {:style {:flex 1 :flex-direction "row" :text-align "center"}}
-   [view {:style {:flex 0.2 :flex-direction "column"}} [text id]]
-   [view {:style {:flex 0.4 :flex-direction "column"}} [text first-name]]
-   [view {:style {:flex 0.4 :flex-direction "column"}}]] [text last-name])
+(defn ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
+
+(defn attendant-row [a]
+  (let [{id :id first-name :first-name last-name :last-name} a]
+    [view {:style
+           {:flex 1 :flex-direction "row" :text-align "center" :align-self "stretch" :height 40 :padding 10 :font-size 30}}
+     [view {:style {:flex 0.2}} [text (-> id (+ 1) str)]]
+     [view {:style {:flex 0.4}} [text first-name]]
+     [view {:style {:flex 0.4}} [text last-name]]]))
 
 (defn app-root []
   (let [attendants (subscribe [:get-attendants])]
-    (fn [] [view
-            {:style {:flex 1 :justify-content "flex-start" :color (:text colors)}}
+    (fn []
+      [view {:style {:flex 1 :justify-content "flex-start" :color (:text colors)}}
+
       [toolbar
        {:title "Attendants"
         :title-color "#FFFFFF"
         :nav-icon menu-img
         :actions [{:title "Calendar"}]
         :style {:height 48 :background-color (:primary colors) :align-items "stretch"}}]
-      [flat-list {:data #js[attendants] :render-item (fn [a] (-> a (attendant-row) (r/as-element)))}]])))
+
+      [flat-list
+        {:data @attendants
+         :key-extractor (fn [item index] (-> item ->clj :id str))
+         :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])))
 
 (defn init []
       (dispatch-sync [:initialize-db])
