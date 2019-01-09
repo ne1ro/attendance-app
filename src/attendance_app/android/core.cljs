@@ -25,10 +25,13 @@
 (defn attendant-row [a]
   (let [{id :id first-name :first-name last-name :last-name} a]
     [view {:style
-           {:flex 1 :flex-direction "row" :text-align "center" :align-self "stretch" :height 40 :padding 10 :font-size 30}}
-     [view {:style {:flex 0.2}} [text (-> id (+ 1) str)]]
-     [view {:style {:flex 0.4}} [text first-name]]
-     [view {:style {:flex 0.4}} [text last-name]]]))
+           {:flex 1 :flex-direction "row" :text-align "center" :align-self "stretch" :height 40 :padding 10 :padding-bottom 15}}
+      [view {:style {:flex 0.2}}
+        [text {:style {:text-align "center" :font-weight "bold" :font-size 20}} (-> id (+ 1) str)]]
+      [view {:style {:flex 0.4}}
+        [text {:style {:font-size 20}} first-name]]
+      [view {:style {:flex 0.4}}
+        [text {:style {:font-size 20}} last-name]]]))
 
 (defn app-root []
   (let [attendants (subscribe [:get-attendants])]
