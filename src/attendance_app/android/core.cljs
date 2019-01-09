@@ -4,7 +4,10 @@
             [attendance-app.events]
             [attendance-app.subs]))
 
+(defn- ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
 (def ReactNative (js/require "react-native"))
+(def Typography (js/require "react-native-typography"))
+(def material (.-material Typography))
 
 (def app-registry (.-AppRegistry ReactNative))
 (def text (r/adapt-react-class (.-Text ReactNative)))
@@ -20,25 +23,17 @@
 
 (defn alert [title] (.alert (.-Alert ReactNative) title))
 
-(defn ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
-
 (defn attendant-row [a]
-  (let [{id :id first-name :first-name last-name :last-name} a]
+  (let [{first-name :first-name last-name :last-name} a]
     [view {:style
            {:flex 1
             :flex-direction "row"
             :text-align "center"
             :align-self "stretch"
-            :height 40
-            :padding-horizontal 20
+            :padding-horizontal 30
             :padding-vertical 10
             :elevation 1}}
-     [view {:style {:flex 0.2}}
-      [text {:style {:font-weight "bold" :font-size 20}} (-> id (+ 1) str)]]
-     [view {:style {:flex 0.4}}
-      [text {:style {:font-size 20}} first-name]]
-     [view {:style {:flex 0.4}}
-      [text {:style {:font-size 20}} last-name]]]))
+     [text {:style (:body2 material)} (str first-name " " last-name)]]))
 
 (defn app-root []
   (let [attendants (subscribe [:get-attendants])]
