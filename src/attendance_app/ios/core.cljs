@@ -13,7 +13,7 @@
 (def touchable-highlight (r/adapt-react-class (.-TouchableHighlight ReactNative)))
 
 (defn alert [title]
-      (.alert (.-Alert ReactNative) title))
+  (.alert (.-Alert ReactNative) title))
 
 (defn app-root []
   (let [greeting (subscribe [:get-greeting])]
@@ -24,5 +24,5 @@
         [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "Attend"]]])))
 
 (defn init []
-      (dispatch-sync [:initialize-db])
-      (.registerComponent app-registry "AttendanceApp" #(r/reactify-component app-root)))
+  (dispatch-sync [:initialize-db])
+  (.registerComponent app-registry "AttendanceApp" #(r/reactify-component app-root)))

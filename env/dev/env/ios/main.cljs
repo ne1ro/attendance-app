@@ -17,11 +17,10 @@
 (def root-el (r/as-element [reloader]))
 
 (defn force-reload! []
-      (clear-subscription-cache!)
-      (swap! cnt inc))
+  (clear-subscription-cache!)
+  (swap! cnt inc))
 
-(fw/start {
-           :websocket-url    (:ios conf/figwheel-urls)
+(fw/start {:websocket-url    (:ios conf/figwheel-urls)
            :heads-up-display false
            :jsload-callback  force-reload!})
 

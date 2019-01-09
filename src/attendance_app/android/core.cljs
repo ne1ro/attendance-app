@@ -33,30 +33,30 @@
             :padding-horizontal 20
             :padding-vertical 10
             :elevation 1}}
-      [view {:style {:flex 0.2}}
-        [text {:style {:font-weight "bold" :font-size 20}} (-> id (+ 1) str)]]
-      [view {:style {:flex 0.4}}
-        [text {:style {:font-size 20}} first-name]]
-      [view {:style {:flex 0.4}}
-        [text {:style {:font-size 20}} last-name]]]))
+     [view {:style {:flex 0.2}}
+      [text {:style {:font-weight "bold" :font-size 20}} (-> id (+ 1) str)]]
+     [view {:style {:flex 0.4}}
+      [text {:style {:font-size 20}} first-name]]
+     [view {:style {:flex 0.4}}
+      [text {:style {:font-size 20}} last-name]]]))
 
 (defn app-root []
   (let [attendants (subscribe [:get-attendants])]
     (fn []
       [view {:style {:flex 1 :justify-content "flex-start" :color (:text colors) :padding-bottom 20}}
 
-      [toolbar
-       {:title "Attendants"
-        :title-color "#FFFFFF"
-        :nav-icon menu-img
-        :actions [{:title "Calendar"}]
-        :style {:height 48 :background-color (:primary colors) :align-items "stretch" :elevation 3}}]
+       [toolbar
+        {:title "Attendants"
+         :title-color "#FFFFFF"
+         :nav-icon menu-img
+         :actions [{:title "Calendar"}]
+         :style {:height 48 :background-color (:primary colors) :align-items "stretch" :elevation 3}}]
 
-      [flat-list
+       [flat-list
         {:data @attendants
          :key-extractor (fn [item index] (-> item ->clj :id str))
          :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])))
 
 (defn init []
-      (dispatch-sync [:initialize-db])
-      (.registerComponent app-registry "AttendanceApp" #(r/reactify-component app-root)))
+  (dispatch-sync [:initialize-db])
+  (.registerComponent app-registry "AttendanceApp" #(r/reactify-component app-root)))
