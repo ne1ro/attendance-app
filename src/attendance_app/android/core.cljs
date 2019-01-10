@@ -1,5 +1,6 @@
 (ns attendance-app.android.core
   (:require [reagent.core :as r :refer [atom]]
+            [attendance-app.android.float-action-button :refer [fab]]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [attendance-app.events]
             [attendance-app.subs]))
@@ -7,6 +8,7 @@
 (defn- ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
 (def ReactNative (js/require "react-native"))
 (def Typography (js/require "react-native-typography"))
+(def MaterialKit (js/require "react-native-material-kit"))
 (def material (.-material Typography))
 
 (def app-registry (.-AppRegistry ReactNative))
@@ -21,8 +23,6 @@
   {:primary "#3F51B5" :dark-primary "#303F9F" :light-primary "#C5CAE9" :accent "#FF5252"
    :text "#212121" :secondary-text "#757575" :divider "#BDBDBD"})
 
-(defn alert [title] (.alert (.-Alert ReactNative) title))
-
 (defn attendant-row [a]
   (let [{first-name :first-name last-name :last-name} a]
     [view {:style
@@ -30,10 +30,10 @@
             :flex-direction "row"
             :text-align "center"
             :align-self "stretch"
-            :padding-horizontal 30
-            :padding-vertical 10
+            :padding-horizontal 40
+            :padding-vertical 15
             :elevation 1}}
-     [text {:style (:body2 material)} (str first-name " " last-name)]]))
+     [text {:style (:display2 material)} (str first-name " " last-name)]]))
 
 (defn app-root []
   (let [attendants (subscribe [:get-attendants])]
@@ -46,6 +46,8 @@
          :nav-icon menu-img
          :actions [{:title "Calendar"}]
          :style {:height 48 :background-color (:primary colors) :align-items "stretch" :elevation 3}}]
+
+       [fab]
 
        [flat-list
         {:data @attendants

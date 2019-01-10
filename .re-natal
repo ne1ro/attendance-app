@@ -6,7 +6,8 @@
     "prod": "env/prod"
   },
   "modules": [
-    "react-native-typography"
+    "react-native-typography",
+    "react-native-material-kit"
   ],
   "imageDirs": [
     "images"
