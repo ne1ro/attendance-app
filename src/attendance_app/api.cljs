@@ -1,5 +1,10 @@
-(ns attendance-app.api [re-frame.core :refer [dispatch dispatch-sync]])
+(ns attendance-app.api
+  (:require [re-frame.core :refer [dispatch dispatch-sync]]))
 
 (def host "http://localhost:3000/")
 
-(def api-get [url] (-> ))
+(defn api-get [url]
+  (->
+    host
+    (str url)
+    (js/fetch (clj->js {:method "GET" :headers {"Content-Type" "application/json"}}))))
