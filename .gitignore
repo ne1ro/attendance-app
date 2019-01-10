@@ -68,3 +68,4 @@ env/dev/env/config.cljs
 figwheel_server.log
 
 .cljs_*
+.lein-repl-history
