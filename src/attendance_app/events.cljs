@@ -2,8 +2,11 @@
   (:require
    [re-frame.core :refer [reg-event-db after dispatch]]
    [clojure.spec.alpha :as s]
+   [attendance-app.alert :as a]
    [attendance-app.api :as api]
    [attendance-app.db :as db :refer [app-db]]))
+
+(defn- show-error [message] (a/alert "Request Error" message))
 
 ;; -- Interceptors ------------------------------------------------------------
 ;;
@@ -21,10 +24,11 @@
     (after (partial check-and-throw ::db/app-db))
     []))
 
+; -- Handlers --
 (reg-event-db :list-attendants
-                  (fn [db _]
-                    (api/list-attendants #(dispatch [:process-response %]) prn)
-                    (assoc db :loading? true)))
+  (fn [db _]
+    (api/list-attendants #(dispatch [:process-response %]) show-error)
+    (assoc db :loading? true)))
 
 (reg-event-db :process-response
   (fn [db [_ response]]
