@@ -1,10 +1,20 @@
-(ns attendance-app.api
-  (:require [re-frame.core :refer [dispatch dispatch-sync]]))
+(ns attendance-app.api)
 
-(def host "http://localhost:3000/")
+(def host "http://10.0.2.2:3000/")
 
-(defn api-get [url]
+(defn- handle-response [resp success-handler]
   (->
-    host
-    (str url)
-    (js/fetch (clj->js {:method "GET" :headers {"Content-Type" "application/json"}}))))
+    resp
+    .json
+    (.then (fn [data] (prn data) (success-handler (js->clj data :keywordize-keys true))))))
+
+(defn- api-get [url success-handler err-handler]
+  (->
+   host
+   (str url)
+   (js/fetch (clj->js {:method "GET" :headers {"Content-Type" "application/json"}}))
+   (.then #(handle-response % success-handler))
+   (.catch err-handler)))
+
+(defn list-attendants [success-handler err-handler]
+  (api-get "attendants" success-handler err-handler))

@@ -1,7 +1,8 @@
 (ns attendance-app.events
   (:require
-   [re-frame.core :refer [reg-event-db after]]
+   [re-frame.core :refer [reg-event-db after dispatch]]
    [clojure.spec.alpha :as s]
+   [attendance-app.api :as api]
    [attendance-app.db :as db :refer [app-db]]))
 
 ;; -- Interceptors ------------------------------------------------------------
@@ -20,16 +21,16 @@
     (after (partial check-and-throw ::db/app-db))
     []))
 
-;; -- Handlers --------------------------------------------------------------
+(reg-event-db :list-attendants
+                  (fn [db _]
+                    (api/list-attendants #(dispatch [:process-response %]) prn)
+                    (assoc db :loading? true)))
+
+(reg-event-db :process-response
+  (fn [db [_ response]]
+    (-> db (assoc :attendants response) (assoc :loading? false))))
 
 (reg-event-db
  :initialize-db
  validate-spec
- (fn [_ _]
-   app-db))
-
-(reg-event-db
- :set-greeting
- validate-spec
- (fn [db [_ value]]
-   (assoc db :greeting value)))
+ (fn [_ _] app-db))

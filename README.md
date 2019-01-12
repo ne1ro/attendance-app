@@ -1,14 +1,29 @@
 # attendance-app
 
-Attendace Application built in Clojure
+Attendance Mobile Application built in Clojure
 
 ## Usage
 
-FIXME
+```
+re-natal use-figwheel && react-native run-android
+```
+
+## Development
+
+```
+lein repl
+(start-figwheel! "android")
+```
+
+## REPL
+
+```
+(in-ns 'attendance-app.android.core)
+```
 
 ## License
 
-Copyright © 2019 FIXME
+Copyright © 2019 neiro
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at

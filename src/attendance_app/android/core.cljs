@@ -24,7 +24,7 @@
    :text "#212121" :secondary-text "#757575" :divider "#BDBDBD"})
 
 (defn attendant-row [a]
-  (let [{first-name :first-name last-name :last-name} a]
+  (let [{first-name :firstName last-name :lastName} a]
     [view {:style
            {:flex 1
             :flex-direction "row"
@@ -36,7 +36,7 @@
      [text {:style (:display2 material)} (str first-name " " last-name)]]))
 
 (defn app-root []
-  (let [attendants (subscribe [:get-attendants])]
+  (let [attendants (subscribe [:list-attendants])]
     (fn []
       [view {:style {:flex 1 :justify-content "flex-start" :color (:text colors) :padding-bottom 20}}
 
@@ -56,4 +56,5 @@
 
 (defn init []
   (dispatch-sync [:initialize-db])
+  (dispatch [:list-attendants])
   (.registerComponent app-registry "AttendanceApp" #(r/reactify-component app-root)))
