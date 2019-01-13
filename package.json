@@ -15,7 +15,8 @@
     "react": "16.6.1",
     "react-native": "0.57.7",
     "react-native-material-kit": "^0.5.1",
-    "react-native-typography": "^1.4.0"
+    "react-native-typography": "^1.4.0",
+    "react-navigation": "^3.0.9"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

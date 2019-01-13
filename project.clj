@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.339"]
                  [com.bhauman/rebel-readline "0.1.4"]
+                 [cljs-react-navigation "0.1.3"]
                  [reagent "0.8.1" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
                  [re-frame "0.10.6"]]
   :plugins [[lein-cljsbuild "1.1.4"]

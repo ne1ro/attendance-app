@@ -26,13 +26,13 @@
 
 ; -- Handlers --
 (reg-event-db :list-attendants
-  (fn [db _]
-    (api/list-attendants #(dispatch [:process-response %]) show-error)
-    (assoc db :loading? true)))
+              (fn [db _]
+                (api/list-attendants #(dispatch [:process-response %]) show-error)
+                (assoc db :loading? true)))
 
 (reg-event-db :process-response
-  (fn [db [_ response]]
-    (-> db (assoc :attendants response) (assoc :loading? false))))
+              (fn [db [_ response]]
+                (-> db (assoc :attendants response) (assoc :loading? false))))
 
 (reg-event-db
  :initialize-db

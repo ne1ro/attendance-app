@@ -4,9 +4,9 @@
 
 (defn- handle-response [resp success-handler]
   (->
-    resp
-    .json
-    (.then (fn [data] (success-handler (js->clj data :keywordize-keys true))))))
+   resp
+   .json
+   (.then (fn [data] (success-handler (js->clj data :keywordize-keys true))))))
 
 (defn- api-get [url success-handler err-handler]
   (->
