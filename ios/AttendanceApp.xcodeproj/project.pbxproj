@@ -38,6 +38,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		E24564D2B88F496787B2DC44 /* libRCTMaterialKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B59EE7D3E9C74D0BB1329837 /* libRCTMaterialKit.a */; };
+		9ED8395023B3421BAD62C38D /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 130ADA926A6448CD8A84D062 /* libRNGestureHandler.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +346,8 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		A294ECB9DC6A4C6184B2E2AB /* RCTMaterialKit.xcodeproj */ = {isa = PBXFileReference; name = "RCTMaterialKit.xcodeproj"; path = "../node_modules/react-native-material-kit/iOS/RCTMaterialKit.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		B59EE7D3E9C74D0BB1329837 /* libRCTMaterialKit.a */ = {isa = PBXFileReference; name = "libRCTMaterialKit.a"; path = "libRCTMaterialKit.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		8711AD9BAD8A43479ABB57F5 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		130ADA926A6448CD8A84D062 /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -373,6 +376,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				E24564D2B88F496787B2DC44 /* libRCTMaterialKit.a in Frameworks */,
+				9ED8395023B3421BAD62C38D /* libRNGestureHandler.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,6 +564,7 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				A294ECB9DC6A4C6184B2E2AB /* RCTMaterialKit.xcodeproj */,
+				8711AD9BAD8A43479ABB57F5 /* RNGestureHandler.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1188,10 +1193,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Debug;
@@ -1214,10 +1221,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Release;
@@ -1241,6 +1250,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Debug;
@@ -1263,6 +1273,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Release;
@@ -1293,10 +1304,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Debug;
@@ -1327,10 +1340,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Release;
@@ -1360,10 +1375,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Debug;
@@ -1393,10 +1410,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 			};
 			name = Release;

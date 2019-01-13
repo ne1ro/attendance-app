@@ -1,60 +1,27 @@
 (ns attendance-app.android.core
-  (:require [reagent.core :as r :refer [atom]]
-            [attendance-app.android.float-action-button :refer [fab]]
-            [re-frame.core :refer [subscribe dispatch dispatch-sync]]
-            [attendance-app.events]
-            [attendance-app.subs]))
+  (:require
+    [reagent.core :as r :refer [atom]]
+    [re-frame.core :refer [subscribe dispatch dispatch-sync]]
+    [attendance-app.android.list-attendants :refer [list-attendants]]))
 
-(defn- ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
+(def react-navigation (js/require "react-navigation"))
 (def ReactNative (js/require "react-native"))
-(def Typography (js/require "react-native-typography"))
-(def MaterialKit (js/require "react-native-material-kit"))
-(def material (.-material Typography))
-
+(def createStackNavigator (.-createStackNavigator react-navigation))
+(def createAppContainer (.-createAppContainer react-navigation))
 (def app-registry (.-AppRegistry ReactNative))
-(def text (r/adapt-react-class (.-Text ReactNative)))
-(def view (r/adapt-react-class (.-View ReactNative)))
-(def toolbar (r/adapt-react-class (.-ToolbarAndroid ReactNative)))
-(def flat-list (r/adapt-react-class (.-FlatList ReactNative)))
-(def image (r/adapt-react-class (.-Image ReactNative)))
 
-(def menu-img (js/require "./images/menu.png"))
-(def colors
-  {:primary "#3F51B5" :dark-primary "#303F9F" :light-primary "#C5CAE9" :accent "#FF5252"
-   :text "#212121" :secondary-text "#757575" :divider "#BDBDBD"})
+(def default-nav-options
+  {:headerStyle {:backgroundColor "#3F51B5"} :headerTitleStyle {:color "#FFFFFF"}})
 
-(defn attendant-row [a]
-  (let [{first-name :firstName last-name :lastName} a]
-    [view {:style
-           {:flex 1
-            :flex-direction "row"
-            :text-align "center"
-            :align-self "stretch"
-            :padding-horizontal 40
-            :padding-vertical 15
-            :elevation 1}}
-     [text {:style (:display2 material)} (str first-name " " last-name)]]))
+(def app-navigator
+  (createStackNavigator
+    (clj->js {:Home {:screen (r/reactify-component list-attendants)
+     :navigationOptions {:title "Attendants"}}})
+    (clj->js {:defaultNavigationOptions default-nav-options})))
 
-(defn app-root []
-  (let [attendants (subscribe [:list-attendants])]
-    (fn []
-      [view {:style {:flex 1 :justify-content "flex-start" :color (:text colors) :padding-bottom 20}}
-
-       [toolbar
-        {:title "Attendants"
-         :title-color "#FFFFFF"
-         :nav-icon menu-img
-         :actions [{:title "Calendar"}]
-         :style {:height 48 :background-color (:primary colors) :align-items "stretch" :elevation 3}}]
-
-       [fab]
-
-       [flat-list
-        {:data @attendants
-         :key-extractor (fn [item index] (-> item ->clj :id str))
-         :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])))
+(defn app-root [] [:> (createAppContainer app-navigator) {}])
 
 (defn init []
   (dispatch-sync [:initialize-db])
   (dispatch [:list-attendants])
-  (.registerComponent app-registry "AttendanceApp" #(r/reactify-component app-root)))
+  (.registerComponent app-registry "AttendanceApp" (r/reactify-component app-root)))

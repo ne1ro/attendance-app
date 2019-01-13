@@ -14,6 +14,7 @@
     "@babel/plugin-external-helpers": "^7.0.0",
     "react": "16.6.1",
     "react-native": "0.57.7",
+    "react-native-gesture-handler": "^1.0.12",
     "react-native-material-kit": "^0.5.1",
     "react-native-typography": "^1.4.0",
     "react-navigation": "^3.0.9"
