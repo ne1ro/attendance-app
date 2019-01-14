@@ -1,6 +1,7 @@
 (ns attendance-app.android.list-attendants (:require [reagent.core :as r :refer [atom]]
                                                      [re-frame.core :refer [subscribe]]
                                                      [attendance-app.android.float-action-button :refer [fab]]
+                                                     [attendance-app.colors :refer [colors]]
                                                      [attendance-app.events]
                                                      [attendance-app.subs]))
 
@@ -18,16 +19,11 @@
 (def image (r/adapt-react-class (.-Image ReactNative)))
 
 (def menu-img (js/require "./images/menu.png"))
-(def colors
-  {:primary "#3F51B5" :dark-primary "#303F9F" :light-primary "#C5CAE9" :accent "#FF5252"
-   :text "#212121" :secondary-text "#757575" :divider "#BDBDBD"})
 
 (defn attendant-row [a]
   (let [{first-name :firstName last-name :lastName} a]
     [view {:style
            {:flex-direction "row"
-            :align-items "center"
-            :justify-content "center"
             :padding-horizontal 20
             :padding-vertical 15}}
      [text {:style (-> material .-subheading js->clj (assoc :text-align "center"))}
