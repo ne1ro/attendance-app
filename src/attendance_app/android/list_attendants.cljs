@@ -9,7 +9,6 @@
 
 (def ReactNative (js/require "react-native"))
 (def Typography (js/require "react-native-typography"))
-(def MaterialKit (js/require "react-native-material-kit"))
 (def material (.-material Typography))
 
 (def text (r/adapt-react-class (.-Text ReactNative)))
@@ -18,7 +17,7 @@
 (def flat-list (r/adapt-react-class (.-FlatList ReactNative)))
 (def image (r/adapt-react-class (.-Image ReactNative)))
 
-(def menu-img (js/require "./images/menu.png"))
+; (def menu-img (js/require "./images/menu.png"))
 
 (defn attendant-row [a]
   (let [{first-name :firstName last-name :lastName} a]
