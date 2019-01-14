@@ -1,12 +1,12 @@
 (ns attendance-app.android.float-action-button
   (:require [reagent.core :as r :refer [atom]]))
 
-(def ReactNative ^:private (js/require "react-native"))
-(def text ^:private (r/adapt-react-class (.-Text ReactNative)))
-(def material-kit ^:private (js/require "react-native-material-kit"))
-(def MDButton ^:private (.-MKButton material-kit))
+(def ReactNative (js/require "react-native"))
+(def text (r/adapt-react-class (.-Text ReactNative)))
+(def material-kit (js/require "react-native-material-kit"))
 
-(defn- button-component [press-handler] (-> MDButton
+(defn- button-component [press-handler] (-> material-kit
+                                            .-MKButton
                                             (.accentColoredFlatButton)
                                             (.withBackgroundColor "#FF5252")
                                             (.withMaskColor "transparent")
