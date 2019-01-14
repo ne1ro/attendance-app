@@ -1,5 +1,6 @@
 (ns attendance-app.api)
 
+; TODO: get from config
 (def host "http://10.0.2.2:3000/")
 
 (defn- handle-response [resp success-handler]
@@ -16,5 +17,5 @@
    (.then #(handle-response % success-handler))
    (.catch (fn [err] (-> err .-message err-handler)))))
 
-(defn list-attendants [success-handler err-handler]
-  (api-get "attendants" success-handler err-handler))
+(defn list-attendants [day success-handler err-handler]
+  (-> "attendances/" (str day) (api-get success-handler err-handler)))

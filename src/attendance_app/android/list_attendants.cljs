@@ -1,8 +1,8 @@
 (ns attendance-app.android.list-attendants (:require [reagent.core :as r :refer [atom]]
-            [re-frame.core :refer [subscribe]]
-            [attendance-app.android.float-action-button :refer [fab]]
-            [attendance-app.events]
-            [attendance-app.subs]))
+                                                     [re-frame.core :refer [subscribe]]
+                                                     [attendance-app.android.float-action-button :refer [fab]]
+                                                     [attendance-app.events]
+                                                     [attendance-app.subs]))
 
 (defn- ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
 
@@ -26,20 +26,23 @@
   (let [{first-name :firstName last-name :lastName} a]
     [view {:style
            {:flex-direction "row"
+            :align-items "center"
+            :justify-content "center"
             :padding-horizontal 20
             :padding-vertical 15}}
      [text {:style (-> material .-subheading js->clj (assoc :text-align "center"))}
-       (str first-name " " last-name)]]))
+      (str first-name " " last-name)]]))
 
-(defn list-attendants [props]
-  (let [attendants (subscribe [:list-attendants])]
+(defn list-attendants [{navigation :navigation}]
+  (let [attendants (subscribe [:list-attendants])
+        day (.getParam navigation "day" "not a day")]
     (fn []
       [view
        {:style {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}}
-       [fab]
+       [fab (prn)]
 
        [text {:style (-> material .-display1 js->clj (assoc :text-align "center"))}
-         "Today's attendants"]
+        "Today's attendants"]
 
        [flat-list
         {:data @attendants

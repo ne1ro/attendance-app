@@ -26,8 +26,8 @@
 
 ; -- Handlers --
 (reg-event-db :list-attendants
-              (fn [db _]
-                (api/list-attendants #(dispatch [:process-response %]) show-error)
+              (fn [db [_ day]]
+                (api/list-attendants day #(dispatch [:process-response %]) show-error)
                 (assoc db :loading? true)))
 
 (reg-event-db :process-response
