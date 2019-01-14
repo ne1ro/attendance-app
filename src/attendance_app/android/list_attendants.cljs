@@ -25,30 +25,24 @@
 (defn attendant-row [a]
   (let [{first-name :firstName last-name :lastName} a]
     [view {:style
-           {:flex 1
-            :flex-direction "row"
-            :text-align "center"
-            :align-self "stretch"
-            :padding-horizontal 40
-            :padding-vertical 15
-            :elevation 1}}
-     [text {:style (:display2 material)} (str first-name " " last-name)]]))
+           {:flex-direction "row"
+            :padding-horizontal 20
+            :padding-vertical 15}}
+     [text {:style (-> material .-subheading js->clj (assoc :text-align "center"))}
+       (str first-name " " last-name)]]))
 
 (defn list-attendants [props]
   (let [attendants (subscribe [:list-attendants])]
     (fn []
-      [view {:style {:flex 1 :justify-content "flex-start" :color (:text colors) :padding-bottom 20}}
-
-       ; [toolbar
-       ;  {:title "Attendants"
-       ;   :title-color "#FFFFFF"
-       ;   :nav-icon menu-img
-       ;   :actions [{:title "Calendar"}]
-       ;   :style {:height 48 :background-color (:primary colors) :align-items "stretch" :elevation 3}}]
-
+      [view
+       {:style {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}}
        [fab]
+
+       [text {:style (-> material .-display1 js->clj (assoc :text-align "center"))}
+         "Today's attendants"]
 
        [flat-list
         {:data @attendants
+         :style {:padding-top 20}
          :key-extractor (fn [item index] (-> item ->clj :id str))
          :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])))

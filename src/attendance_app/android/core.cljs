@@ -1,5 +1,7 @@
 (ns attendance-app.android.core
   (:require
+    [cljs-time.core :as time]
+    [cljs-time.format :as time-format]
     [reagent.core :as r :refer [atom]]
     [re-frame.core :refer [subscribe dispatch dispatch-sync]]
     [attendance-app.android.list-attendants :refer [list-attendants]]))
@@ -10,14 +12,17 @@
 (def createAppContainer (.-createAppContainer react-navigation))
 (def app-registry (.-AppRegistry ReactNative))
 
+(defn format-day [fmt] (time-format/unparse (time-format/formatter fmt) (time/now)))
+
 (def default-nav-options
   {:headerStyle {:backgroundColor "#3F51B5"} :headerTitleStyle {:color "#FFFFFF"}})
 
 (def app-navigator
-  (createStackNavigator
-    (clj->js {:Home {:screen (r/reactify-component list-attendants)
-     :navigationOptions {:title "Attendants"}}})
-    (clj->js {:defaultNavigationOptions default-nav-options})))
+  (let [current-day (format-day "yyyy-MM-dd") day-to-show (format-day "E d 'of' MMMM")]
+    (createStackNavigator (clj->js {:Home {
+     :screen (r/reactify-component list-attendants)
+     :navigationOptions {:title day-to-show :current-day current-day}}})
+    (clj->js {:defaultNavigationOptions default-nav-options}))))
 
 (defn app-root [] [:> (createAppContainer app-navigator) {}])
 
