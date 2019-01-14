@@ -34,6 +34,16 @@
               (fn [db [_ response]]
                 (-> db (assoc :attendants response) (assoc :loading? false))))
 
+(reg-event-db :set-attendant-first-name
+  (fn [db [_ value]] (assoc db :attendant-first-name value)))
+
+(reg-event-db :set-attendant-last-name
+  (fn [db [_ value]] (assoc db :attendant-last-name value)))
+
+(reg-event-db :create-attendant
+              (fn [db _] (prn db)
+                (-> db (assoc :loading? true) (dissoc :attendant-first-name :attendant-last-name))))
+
 (reg-event-db
  :initialize-db
  validate-spec

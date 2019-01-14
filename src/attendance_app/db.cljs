@@ -7,4 +7,6 @@
   (s/keys :req-un [::greeting]))
 
 ;; initial state of app-db
-(def app-db {:greeting "Attendance" :attendants [] :loading? false})
+(def app-db
+  {:greeting "Attendance" :attendants [] :loading? false
+   :attendant-first-name "" :attendant-last-name ""})

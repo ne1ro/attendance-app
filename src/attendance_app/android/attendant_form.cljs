@@ -1,5 +1,6 @@
 (ns attendance-app.android.attendant-form
   (:require [reagent.core :as r :refer [atom]]
+            [re-frame.core :refer [subscribe dispatch]]
             [attendance-app.colors :refer [colors]]))
 
 (def ReactNative (js/require "react-native"))
@@ -37,6 +38,12 @@
             :background-color (:dark-primary colors)
             :color (:white colors) :padding 20}}
 
-     [text-edit {:placeholder "First Name"}]
-     [text-edit {:placeholder "Last Name"}]
-     [submit-button]]))
+     [text-edit
+      {:placeholder "First Name" :value @(subscribe [:attendant-first-name])
+       :on-change #(dispatch [:set-attendant-first-name (-> % .-target .-value)])}]
+
+     [text-edit
+      {:placeholder "Last Name" :value @(subscribe [:attendant-last-name])
+       :on-change #(dispatch [:set-attendant-last-name (-> % .-target .-value)])}]
+
+     [submit-button {:on-press #(dispatch [:create-attendant])}]]))
