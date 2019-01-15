@@ -45,7 +45,7 @@
                 (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
                   (api/create-attendant
                     {:firstName first-name :lastName last-name}
-                    prn show-error)
+                    #(if (contains? % :errors) (str show-error) prn) show-error)
                   (-> db
                     (assoc :loading? true)
                     (dissoc :attendant-first-name :attendant-last-name)))))

@@ -39,11 +39,9 @@
             :color (:white colors) :padding 20}}
 
      [text-edit
-      {:placeholder "First Name" :value @(subscribe [:attendant-first-name])
-       :on-change #(dispatch [:set-attendant-first-name (-> % .-target .-value)])}]
+        {:placeholder "First Name" :ref "1" :onTextChange #(dispatch [:set-attendant-first-name %])}]
 
      [text-edit
-      {:placeholder "Last Name" :value @(subscribe [:attendant-last-name])
-       :on-change #(dispatch [:set-attendant-last-name (-> % .-target .-value)])}]
+      {:placeholder "Last Name" :ref "2" :onTextChange #(dispatch [:set-attendant-last-name %])}]
 
      [submit-button {:on-press #(dispatch [:create-attendant])}]]))
