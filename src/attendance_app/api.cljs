@@ -3,6 +3,8 @@
 ; TODO: get from config
 (def host "http://10.0.2.2:3000/")
 
+(def headers {"Content-Type" "application/json"})
+
 (defn- handle-response [resp success-handler]
   (->
    resp
@@ -13,9 +15,18 @@
   (->
    host
    (str url)
-   (js/fetch (clj->js {:method "GET" :headers {"Content-Type" "application/json"}}))
+   (js/fetch (clj->js {:method "GET" :headers headers}))
    (.then #(handle-response % success-handler))
    (.catch (fn [err] (-> err .-message err-handler)))))
 
-(defn list-attendants [day success-handler err-handler]
-  (-> "attendances/" (str day) (api-get success-handler err-handler)))
+(defn- api-post [url body success-handler err-handler]
+  (->
+    host
+    (str url)
+    (js/fetch
+      (clj->js {:method "POST" :headers headers :body (js/JSON.stringify (clj->js body))}))
+    (.then #(handle-response % success-handler))
+    (.catch #(-> % .-message err-handler))))
+
+(def list-attendants (partial api-get "attendances/"))
+(def create-attendant (partial api-post "attendants"))

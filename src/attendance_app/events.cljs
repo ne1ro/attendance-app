@@ -41,8 +41,14 @@
   (fn [db [_ value]] (assoc db :attendant-last-name value)))
 
 (reg-event-db :create-attendant
-              (fn [db _] (prn db)
-                (-> db (assoc :loading? true) (dissoc :attendant-first-name :attendant-last-name))))
+              (fn [db _]
+                (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
+                  (api/create-attendant
+                    {:firstName first-name :lastName last-name}
+                    prn show-error)
+                  (-> db
+                    (assoc :loading? true)
+                    (dissoc :attendant-first-name :attendant-last-name)))))
 
 (reg-event-db
  :initialize-db
