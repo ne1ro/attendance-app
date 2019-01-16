@@ -6,8 +6,6 @@
    [attendance-app.api :as api]
    [attendance-app.db :as db :refer [app-db]]))
 
-(defn- show-error [message] (a/alert "Request Error" message))
-
 ;; -- Interceptors ------------------------------------------------------------
 ;;
 ;; See https://github.com/Day8/re-frame/blob/master/docs/Interceptors.md
@@ -25,14 +23,15 @@
     []))
 
 ; -- Handlers --
+(defn- show-error [message] (a/alert "Request Error" message))
+
 (reg-event-db :list-attendants
               (fn [db [_ day]]
-                (api/list-attendants day #(dispatch [:process-response %]) show-error)
+                (api/list-attendants day #(dispatch [:process-response :attendants %]) show-error)
                 (assoc db :loading? true)))
 
 (reg-event-db :process-response
-              (fn [db [_ response]]
-                (-> db (assoc :attendants response) (assoc :loading? false))))
+              (fn [db [_ db-key response]] (-> db (assoc db-key response) (assoc :loading? false))))
 
 (reg-event-db :set-attendant-first-name
   (fn [db [_ value]] (assoc db :attendant-first-name value)))
@@ -40,17 +39,23 @@
 (reg-event-db :set-attendant-last-name
   (fn [db [_ value]] (assoc db :attendant-last-name value)))
 
+(defn- atendant-creation-handler [response]
+  (if (contains? response :errors)
+    show-error
+    ((dispatch [:process-response :attendant-form response])(navigate "AttendantsList"))))
+
 (reg-event-db :create-attendant
-              (fn [db _]
+              (fn [db [_ navigate]]
                 (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
-                  (api/create-attendant
-                    {:firstName first-name :lastName last-name}
-                    #(if (contains? % :errors) (str show-error) prn) show-error)
                   (-> db
                     (assoc :loading? true)
-                    (dissoc :attendant-first-name :attendant-last-name)))))
+                    (dissoc :attendant-first-name :attendant-last-name))
+                  (api/create-attendant
+                    {:firstName first-name :lastName last-name}
+                    atendant-creation-handler
+                    show-error))))
 
 (reg-event-db
- :initialize-db
- validate-spec
- (fn [_ _] app-db))
+  :initialize-db
+  validate-spec
+  (fn [_ _] app-db))

@@ -44,4 +44,4 @@
      [text-edit
       {:placeholder "Last Name" :ref "2" :onTextChange #(dispatch [:set-attendant-last-name %])}]
 
-     [submit-button {:on-press #(dispatch [:create-attendant])}]]))
+     [submit-button {:on-press #(dispatch [:create-attendant (.-navigate navigation)])}]]))

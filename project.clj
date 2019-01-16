@@ -21,8 +21,9 @@
              ["with-profile" "advanced" "cljsbuild" "once"]]}
   :jvm-opts ["-XX:+IgnoreUnrecognizedVMOptions" "--add-modules jdk.scripting.nashorn"]
   :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.18"] [org.clojure/tools.nrepl "0.2.13"]
-                                  [cljfmt "0.5.1"]
+                                  [cljfmt "0.5.1"] [refactor-nrepl "2.3.0-SNAPSHOT"]
                                   [cider/piggieback "0.3.10"] [http-kit "2.3.0"]]
+                   :plugins [[cider/cider-nrepl "0.20.0"] [jonase/eastwood "0.3.4" :exclusions [org.clojure/clojure]]]
                    :source-paths ["src" "env/dev"]
                    :repl-options {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
                    :cljsbuild    {:builds [{:id           "ios"
