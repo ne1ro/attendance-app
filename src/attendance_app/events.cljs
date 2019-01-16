@@ -31,14 +31,14 @@
                 (assoc db :loading? true)))
 
 (reg-event-db :process-response
-              (fn [db [_ [db-key response]]] (-> db (assoc db-key response) (assoc :loading? false))))
+              (fn [db [_ [db-key response]]]
+                (-> db (assoc db-key response) (assoc :loading? false))))
 
 (reg-event-db :set-attendant-first-name
               (fn [db [_ value]] (assoc db :attendant-first-name value)))
 
 (reg-event-db :set-attendant-last-name
               (fn [db [_ value]] (assoc db :attendant-last-name value)))
-
 
 (defn- process-and-navigate [navigate key-and-response]
   (dispatch [:process-response [key-and-response]]) (navigate))

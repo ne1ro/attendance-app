@@ -36,11 +36,14 @@
        {:style {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}}
        [fab (partial (.-navigate navigation) "AttendantForm")]
 
-       [text {:style (-> material .-display1 js->clj (assoc :text-align "center"))}
-        "Today's attendants"]
+       (if (and (vector? @attendants) (not (empty? @attendants)))
+         [view [text {:style ( -> material .-subheading)} "There is no one to attend"]]
 
-       [flat-list
-        {:data @attendants
-         :style {:padding-top 20}
-         :key-extractor (fn [item index] (-> item ->clj :id str))
-         :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])))
+         [view
+           [text {:style (-> material .-display1 js->clj (assoc :text-align "center"))}
+            "Today's attendants"]
+           [flat-list
+             {:data @attendants
+              :style {:padding-top 20}
+              :key-extractor (fn [item index] (-> item ->clj :id str))
+              :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])])))
