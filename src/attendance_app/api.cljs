@@ -24,7 +24,7 @@
 (defn- api-post [url body success-handler err-handler]
   (fetch url "POST" {:body (js/JSON.stringify (clj->js body))} success-handler err-handler))
 
-(def list-attendants [day success-handler err-handler]
+(defn list-attendants [day success-handler err-handler]
   (api-get (str "attendances/" day) success-handler err-handler))
 
 (def create-attendant (partial api-post "attendants"))
