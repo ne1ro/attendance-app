@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@babel/plugin-external-helpers": "^7.0.0",
+    "metro": "^0.48.5",
     "react": "16.6.1",
     "react-native": "0.57.7",
     "react-native-gesture-handler": "^1.0.12",

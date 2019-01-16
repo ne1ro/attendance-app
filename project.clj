@@ -11,6 +11,7 @@
                  [re-frame "0.10.6"]]
   :plugins [[lein-cljsbuild "1.1.4"]
             [lein-cljfmt "0.6.3"]
+            [lein-kibit "0.1.6"]
             [lein-figwheel "0.5.18"]]
   :clean-targets ["target/" "index.ios.js" "index.android.js" #_($PLATFORM_CLEAN$)]
   :aliases {"prod-build" ^{:doc "Recompile code with prod profile."}

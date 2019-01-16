@@ -26,7 +26,7 @@
 (def app-navigator
   (createStackNavigator (clj->js routes)
                         (clj->js
-                         {:initialRouteName "AttendantForm"
+                         {:initialRouteName "AttendantsList"
                           :initialRouteParams {:day (format-day "yyyy-MM-dd")}
                           :defaultNavigationOptions default-nav-options})))
 

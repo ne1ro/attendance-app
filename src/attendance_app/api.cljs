@@ -21,12 +21,12 @@
 
 (defn- api-post [url body success-handler err-handler]
   (->
-    host
-    (str url)
-    (js/fetch
-      (clj->js {:method "POST" :headers headers :body (js/JSON.stringify (clj->js body))}))
-    (.then #(handle-response % success-handler))
-    (.catch #(-> % .-message err-handler))))
+   host
+   (str url)
+   (js/fetch
+    (clj->js {:method "POST" :headers headers :body (js/JSON.stringify (clj->js body))}))
+   (.then #(handle-response % success-handler))
+   (.catch #(-> % .-message err-handler))))
 
 (def list-attendants (partial api-get "attendances/"))
 (def create-attendant (partial api-post "attendants"))

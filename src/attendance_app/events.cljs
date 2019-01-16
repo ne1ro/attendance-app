@@ -27,35 +27,31 @@
 
 (reg-event-db :list-attendants
               (fn [db [_ day]]
-                (api/list-attendants day #(dispatch [:process-response :attendants %]) show-error)
+                (api/list-attendants day #(dispatch [:process-response [:attendants %]]) show-error)
                 (assoc db :loading? true)))
 
 (reg-event-db :process-response
-              (fn [db [_ db-key response]] (-> db (assoc db-key response) (assoc :loading? false))))
+              (fn [db [_ [db-key response]]] (-> db (assoc db-key response) (assoc :loading? false))))
 
 (reg-event-db :set-attendant-first-name
-  (fn [db [_ value]] (assoc db :attendant-first-name value)))
+              (fn [db [_ value]] (assoc db :attendant-first-name value)))
 
 (reg-event-db :set-attendant-last-name
-  (fn [db [_ value]] (assoc db :attendant-last-name value)))
+              (fn [db [_ value]] (assoc db :attendant-last-name value)))
 
-(defn- atendant-creation-handler [response]
-  (if (contains? response :errors)
-    show-error
-    ((dispatch [:process-response :attendant-form response])(navigate "AttendantsList"))))
+
+(defn- process-and-navigate [navigate key-and-response]
+  (dispatch [:process-response [key-and-response]]) (navigate))
 
 (reg-event-db :create-attendant
               (fn [db [_ navigate]]
                 (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
-                  (-> db
-                    (assoc :loading? true)
-                    (dissoc :attendant-first-name :attendant-last-name))
                   (api/create-attendant
-                    {:firstName first-name :lastName last-name}
-                    atendant-creation-handler
-                    show-error))))
+                   {:firstName first-name :lastName last-name}
+                   #(-> navigate (partial "AttendantsList") (process-and-navigate [:attendant-form %]))
+                   show-error)
+                  (-> db
+                      (assoc :loading? true)
+                      (dissoc :attendant-first-name :attendant-last-name)))))
 
-(reg-event-db
-  :initialize-db
-  validate-spec
-  (fn [_ _] app-db))
+(reg-event-db :initialize-db validate-spec (fn [_ _] app-db))

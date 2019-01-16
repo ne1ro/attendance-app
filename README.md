@@ -1,4 +1,4 @@
-# attendance-app
+# AttendanceApp
 
 Attendance Mobile Application built in Clojure
 
@@ -13,6 +13,12 @@ re-natal use-figwheel && react-native run-android
 ```
 lein repl
 (start-figwheel! "android")
+```
+
+Debug app's db:
+
+```
+cljs.user=> re-frame.db/app-db
 ```
 
 ## REPL

@@ -39,7 +39,7 @@
             :color (:white colors) :padding 20}}
 
      [text-edit
-        {:placeholder "First Name" :ref "1" :onTextChange #(dispatch [:set-attendant-first-name %])}]
+      {:placeholder "First Name" :ref "1" :onTextChange #(dispatch [:set-attendant-first-name %])}]
 
      [text-edit
       {:placeholder "Last Name" :ref "2" :onTextChange #(dispatch [:set-attendant-last-name %])}]

@@ -30,11 +30,11 @@
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
-        day (.getParam navigation "day" "not a day")]
+        day (.getParam navigation "day" "2019-02-01")]
     (fn []
       [view
        {:style {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}}
-       [fab (prn)]
+       [fab (partial (.-navigate navigation) "AttendantForm")]
 
        [text {:style (-> material .-display1 js->clj (assoc :text-align "center"))}
         "Today's attendants"]
