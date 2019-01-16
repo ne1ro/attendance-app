@@ -4,6 +4,7 @@
    [clojure.spec.alpha :as s]
    [attendance-app.alert :as a]
    [attendance-app.api :as api]
+   [attendance-app.utils :refer [current-day]]
    [attendance-app.db :as db :refer [app-db]]))
 
 ;; -- Interceptors ------------------------------------------------------------
@@ -40,15 +41,14 @@
 (reg-event-db :set-attendant-last-name
               (fn [db [_ value]] (assoc db :attendant-last-name value)))
 
-(defn- process-and-navigate [navigate key-and-response]
-  (dispatch [:process-response [key-and-response]]) (navigate))
-
 (reg-event-db :create-attendant
               (fn [db [_ navigate]]
                 (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
                   (api/create-attendant
                    {:firstName first-name :lastName last-name}
-                   #(-> navigate (partial "AttendantsList") (process-and-navigate [:attendant-form %]))
+                   #(do (dispatch [:process-response [:attendant-form %]])
+                        (dispatch [:list-attendants (current-day "yyyy-MM-dd")])
+                        (navigate "AttendantsList"))
                    show-error)
                   (-> db
                       (assoc :loading? true)

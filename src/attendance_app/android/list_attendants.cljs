@@ -18,7 +18,7 @@
 
 (def styles
   {:subheading (-> typography .-subheading ->clj (assoc :text-align "center"))
-   :title (-> typography .-subheading ->clj (assoc :text-align "center"))
+   :title (-> typography .-title ->clj (assoc :text-align "center"))
    :display1 (-> typography .-display1 ->clj (assoc :text-align "center"))
    :container {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}})
 
@@ -37,7 +37,7 @@
       [view {:style (:container styles)}
        [fab (partial (.-navigate navigation) "AttendantForm")]
 
-       (if (or (not vector? @attendants) (empty? @attendants))
+       (if (or (empty? @attendants) (not (vector? @attendants)))
          [view
           [text {:style (:title styles)} "There is no one to attend :("]
           [text {:style (-> styles :subheading (assoc :padding-top 20))}
@@ -49,4 +49,4 @@
              {:data @attendants
               :style {:padding-top 20}
               :key-extractor (fn [item index] (-> item ->clj :id str))
-              :render-item #(% ->clj :item attendant-row r/as-element)}]])])))
+              :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])])))
