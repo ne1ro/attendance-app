@@ -18,17 +18,20 @@
 
 (def styles
   {:subheading (-> typography .-subheading ->clj (assoc :text-align "center"))
-   :title (-> typography .-title ->clj (assoc :text-align "center"))
-   :display1 (-> typography .-display1 ->clj (assoc :text-align "center"))
-   :container {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}})
+   :title      (-> typography .-title ->clj (assoc :text-align "center"))
+   :display1   (-> typography .-display1 ->clj (assoc :text-align "center"))
+   :dot        {:text-align "center" :font-size 24 :font-weight "bold"}
+   :container  {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}})
 
 (defn attendant-row [a]
-  (let [{first-name :firstName last-name :lastName} a]
+  (let [{first-name :firstName last-name :lastName status :status} a]
     [view {:style
            {:flex-direction "row"
             :padding-horizontal 20
             :padding-vertical 15}}
-     [text {:style (:subheading styles)} (str first-name " " last-name)]]))
+     [view {:style {:flex-direction "column" :flex 0.2}} [text {:style (:dot styles)} (str status "•")]]]
+    [view {:style {:flex-direction "column" :flex 0.8}}
+     [text {:style (:subheading styles)} (str last-name " " first-name)]] ] ) )
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
