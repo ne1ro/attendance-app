@@ -29,9 +29,9 @@
            {:flex-direction "row"
             :padding-horizontal 20
             :padding-vertical 15}}
-     [view {:style {:flex-direction "column" :flex 0.2}} [text {:style (:dot styles)} (str status "•")]]]
+     [view {:style {:flex-direction "column" :flex 0.2}} [text {:style (:dot styles)} (str status "•")]]
     [view {:style {:flex-direction "column" :flex 0.8}}
-     [text {:style (:subheading styles)} (str last-name " " first-name)]] ] ) )
+     [text {:style (:subheading styles)} (str last-name " " first-name)]]]))
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
