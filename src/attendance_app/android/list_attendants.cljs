@@ -17,21 +17,29 @@
 (def image (r/adapt-react-class (.-Image ReactNative)))
 
 (def styles
-  {:subheading (-> typography .-subheading ->clj (assoc :text-align "center"))
-   :title      (-> typography .-title ->clj (assoc :text-align "center"))
-   :display1   (-> typography .-display1 ->clj (assoc :text-align "center"))
-   :dot        {:text-align "center" :font-size 24 :font-weight "bold"}
-   :container  {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}})
+  {:subheading    (-> typography .-subheading ->clj (assoc :text-align "center"))
+   :title         (-> typography .-title ->clj (assoc :text-align "center"))
+   :display1      (-> typography .-display1 ->clj (assoc :text-align "center"))
+   :container     {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}
+   :dot-container {:flex-direction     "column"
+                   :flex               0.25
+                   :align-items        "flex-end"
+                   :justify-content    "center"
+                   :padding-horizontal 8}
+   :dot           {:height 12 :width 12 :border-radius 6}
+   :attendant-row {:flex-direction "row" :padding-horizontal 20 :padding-vertical 15}})
 
-(defn attendant-row [a]
+(defn- set-dot-style [status]
+  (let [color (case status "attended" (:complementary colors) (:accent colors))]
+    (-> styles :dot (assoc :background-color color))))
+
+(defn- attendant-row [a]
   (let [{first-name :firstName last-name :lastName status :status} a]
-    [view {:style
-           {:flex-direction "row"
-            :padding-horizontal 20
-            :padding-vertical 15}}
-     [view {:style {:flex-direction "column" :flex 0.2}} [text {:style (:dot styles)} (str status "•")]]
-    [view {:style {:flex-direction "column" :flex 0.8}}
-     [text {:style (:subheading styles)} (str last-name " " first-name)]]]))
+    [view {:style (:attendant-row styles)}
+     [view {:style (:dot-container styles)} [view {:style (set-dot-style status)}]]
+
+     [view {:style {:flex-direction "column" :flex 0.75}}
+      [text {:style (-> styles :subheading (assoc :text-align "left"))} (str last-name " " first-name)]]]))
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
@@ -44,12 +52,12 @@
          [view
           [text {:style (:title styles)} "There is no one to attend :("]
           [text {:style (-> styles :subheading (assoc :padding-top 20))}
-            "Would you like to add someone?"]]
+           "Would you like to add someone?"]]
 
          [view
-           [text {:style (:display1 styles)} "Today's attendants"]
-           [flat-list
-             {:data @attendants
-              :style {:padding-top 20}
-              :key-extractor (fn [item index] (-> item ->clj :id str))
-              :render-item (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])])))
+          [text {:style (:display1 styles)} "Today's attendants"]
+          [flat-list
+           {:data          @attendants
+            :style         {:padding-top 20}
+            :key-extractor (fn [item index] (-> item ->clj :id str))
+            :render-item   (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])])))

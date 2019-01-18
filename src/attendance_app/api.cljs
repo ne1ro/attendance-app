@@ -12,11 +12,11 @@
 (defn- fetch [url method params success-handler err-handler]
   (let [default-params {:method method :headers {"Content-Type" "application/json"}}]
     (->
-      host
-      (str url)
-      (js/fetch (clj->js (merge default-params params)))
-      (.then #(handle-response % success-handler))
-      (.catch #(-> % .-message err-handler)))))
+     host
+     (str url)
+     (js/fetch (clj->js (merge default-params params)))
+     (.then #(handle-response % success-handler))
+     (.catch #(-> % .-message err-handler)))))
 
 (defn- api-get [url success-handler err-handler]
   (fetch url "GET" {} success-handler err-handler))
