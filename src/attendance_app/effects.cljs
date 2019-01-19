@@ -1,6 +1,5 @@
 (ns attendance-app.effects
-  (:require [day8.re-frame.http-fx]
-            [ajax.core :as ajax]
+  (:require [attendance-app.fetch]
             [re-frame.core :refer [reg-event-fx]]))
 
 ; TODO: get from config
@@ -8,24 +7,16 @@
 
 (reg-event-fx ::api-get
               (fn [{db :db} [_ url]]
-                (prn url)
-                {:http-xhrio
-                     {:method          :get
-                      :url             (str host url)
-                      :timeout         1000
-                      :format          (ajax/json-response-format)
-                      :response-format (ajax/json-response-format {:keywords? true})
-                      :on-success      [:process-response]
-                      :on-failure      [::show-error]}
+                {:fetch
+                     {:url        (str host url)
+                      :on-success [:process-response]
+                      :on-failure [:show-error]}
                  :db (assoc db :loading? true)}))
 
 (reg-event-fx ::api-post
-              (fn [_world [_ data]]
-   {:http-xhrio {:method          :post
-                 :uri             host
-                 :params          data
-                 :timeout         2500
-                 :format          (ajax/json-request-format)
-                 :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success      [::process-response]
-                 :on-failure      [::show-error]}}))
+              (fn [_world [_ url body]]
+                {:fetch {:method     "POST"
+                         :url        (str host url)
+                         :body       body
+                         :on-success [:process-response]
+                         :on-failure [:show-error]}}))

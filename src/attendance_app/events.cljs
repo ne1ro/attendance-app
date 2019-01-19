@@ -1,11 +1,11 @@
 (ns attendance-app.events
   (:require
-   [re-frame.core :refer [reg-event-db after dispatch]]
-   [clojure.spec.alpha :as s]
-   [attendance-app.alert :as a]
-   [attendance-app.api :as api]
-   [attendance-app.utils :refer [current-day]]
-   [attendance-app.db :as db :refer [app-db]]))
+    [re-frame.core :refer [reg-event-db after dispatch]]
+    [clojure.spec.alpha :as s]
+    [attendance-app.alert :as a]
+    [attendance-app.effects]
+    [attendance-app.utils :refer [current-day]]
+    [attendance-app.db :as db :refer [app-db]]))
 
 ;; -- Interceptors ------------------------------------------------------------
 ;;
@@ -27,7 +27,7 @@
 (defn- show-error [message] (a/alert "Request Error" message))
 
 (reg-event-db :list-attendants
-              (fn [_db [_ day]] (dispatch ::api-get (str "attendants/" day))))
+              (fn [_db [_ day]] (dispatch [::api-get (str "attendants/" day)])))
 
 (reg-event-db :process-response
               (fn [db [_ [db-key response]]]
@@ -41,16 +41,12 @@
 
 (reg-event-db :create-attendant
               (fn [db [_ navigate]]
+                ; TODO: use navigation func
                 (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
-                  (api/create-attendant
-                   {:firstName first-name :lastName last-name}
-                   #(do (dispatch [:process-response [:attendant-form %]])
-                        (dispatch [:list-attendants (current-day "yyyy-MM-dd")])
-                        (navigate "AttendantsList"))
-                   show-error)
-                  (-> db
-                      (assoc :loading? true)
-                      (dissoc :attendant-first-name :attendant-last-name)))))
+                  (dispatch [::api-post
+                             "attendants"
+                             {:firstName first-name :lastName last-name}])
+                  {:firstName first-name :lastName last-name})))
 
 (reg-event-db :show-error (fn [_db msg] (prn msg) (show-error msg)))
 

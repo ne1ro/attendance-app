@@ -7,7 +7,6 @@
                  [org.clojure/clojurescript "1.10.339"]
                  [com.bhauman/rebel-readline "0.1.4"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
-                 [day8.re-frame/http-fx "0.1.6"]
                  [reagent "0.8.1" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
                  [re-frame "0.10.6"]]
   :plugins [[lein-cljsbuild "1.1.4"]

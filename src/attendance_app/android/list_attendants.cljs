@@ -1,4 +1,5 @@
-(ns attendance-app.android.list-attendants (:require [reagent.core :as r :refer [atom]]
+(ns attendance-app.android.list-attendants
+  (:require [reagent.core :as r :refer [atom]]
                                                      [re-frame.core :refer [subscribe]]
                                                      [attendance-app.android.float-action-button :refer [fab]]
                                                      [attendance-app.colors :refer [colors]]
@@ -39,7 +40,8 @@
      [view {:style (:dot-container styles)} [view {:style (set-dot-style status)}]]
 
      [view {:style {:flex-direction "column" :flex 0.75}}
-      [text {:style (-> styles :subheading (assoc :text-align "left"))} (str last-name " " first-name)]]]))
+      [text {:style (-> styles :subheading (assoc :text-align "left"))}
+       (str last-name " " first-name)]]]))
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
