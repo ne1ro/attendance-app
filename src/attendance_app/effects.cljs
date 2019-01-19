@@ -6,13 +6,13 @@
 (def host "http://10.0.2.2:3000/")
 
 (re-frame/reg-event-fx
-  ::http-post
-  (fn [_world [_ val]]
-    {:http-xhrio {:method          :post
-                  :uri             host
-                  :params          data
-                  :timeout         2500
-                  :format          (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success      [::process-response]
-                  :on-failure      [::show-error]}}))
+ ::http-post
+ (fn [_world [_ val]]
+   {:http-xhrio {:method          :post
+                 :uri             host
+                 :params          data
+                 :timeout         2500
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::process-response]
+                 :on-failure      [::show-error]}}))
