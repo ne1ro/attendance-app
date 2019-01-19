@@ -59,5 +59,5 @@
           [flat-list
            {:data          @attendants
             :style         {:padding-top 20}
-            :key-extractor (fn [item index] (-> item ->clj :id str))
+            :key-extractor (fn [item _] (-> item ->clj :id str))
             :render-item   (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])])))

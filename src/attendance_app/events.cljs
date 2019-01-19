@@ -27,9 +27,7 @@
 (defn- show-error [message] (a/alert "Request Error" message))
 
 (reg-event-db :list-attendants
-              (fn [db [_ day]]
-                (api/list-attendants day #(dispatch [:process-response [:attendants %]]) show-error)
-                (assoc db :loading? true)))
+              (fn [_db [_ day]] (dispatch ::api-get (str "attendants/" day))))
 
 (reg-event-db :process-response
               (fn [db [_ [db-key response]]]
@@ -53,5 +51,7 @@
                   (-> db
                       (assoc :loading? true)
                       (dissoc :attendant-first-name :attendant-last-name)))))
+
+(reg-event-db :show-error (fn [_db msg] (prn msg) (show-error msg)))
 
 (reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
