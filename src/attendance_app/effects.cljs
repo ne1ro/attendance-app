@@ -1,22 +1,28 @@
 (ns attendance-app.effects
-  (:require [attendance-app.fetch]
-            [re-frame.core :refer [reg-event-fx]]))
+  (:require
+    [re-frame.core :refer [reg-fx dispatch]]
+    [attendance-app.alert :as a]))
 
-; TODO: get from config
-(def host "http://10.0.2.2:3000/")
+(defn- handle-response [resp success-handler]
+  (->
+    resp
+    .json
+    (.then (fn [data] (success-handler (js->clj data :keywordize-keys true))))))
 
-(reg-event-fx ::api-get
-              (fn [{db :db} [_ url]]
-                {:fetch
-                     {:url        (str host url)
-                      :on-success [:process-response]
-                      :on-failure [:show-error]}
-                 :db (assoc db :loading? true)}))
+(defn- fetch [url params success-handler err-handler]
+  (let [default-params {:method "GET" :headers {"Content-Type" "application/json"}}]
+    (->
+      url
+      (js/fetch (clj->js (merge default-params params)))
+      (.then #(handle-response % success-handler))
+      (.catch #(-> % .-message err-handler)))))
 
-(reg-event-fx ::api-post
-              (fn [_world [_ url body]]
-                {:fetch {:method     "POST"
-                         :url        (str host url)
-                         :body       body
-                         :on-success [:process-response]
-                         :on-failure [:show-error]}}))
+(defn- fetch-effect [params]
+  (let [{url :url on-success :on-success on-failure :on-failure} params]
+    (fetch
+      url params
+      (dispatch on-success)
+      (dispatch on-failure))))
+
+(reg-fx :alert [msg] (a/alert "Request Error" msg))
+(reg-fx :fetch fetch-effect)

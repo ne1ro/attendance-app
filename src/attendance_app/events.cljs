@@ -1,11 +1,13 @@
 (ns attendance-app.events
   (:require
-    [re-frame.core :refer [reg-event-db after dispatch]]
+    [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
     [clojure.spec.alpha :as s]
-    [attendance-app.alert :as a]
     [attendance-app.effects]
     [attendance-app.utils :refer [current-day]]
     [attendance-app.db :as db :refer [app-db]]))
+
+; TODO: get from config
+(def host "http://10.0.2.2:3000/")
 
 ;; -- Interceptors ------------------------------------------------------------
 ;;
@@ -24,10 +26,8 @@
     []))
 
 ; -- Handlers --
-(defn- show-error [message] (a/alert "Request Error" message))
-
-(reg-event-db :list-attendants
-              (fn [_db [_ day]] (dispatch [::api-get (str "attendants/" day)])))
+(reg-event-fx :list-attendants
+              (fn [_ [_ day]] {:dispatch [::api-get (str "attendances/" day)]}))
 
 (reg-event-db :process-response
               (fn [db [_ [db-key response]]]
@@ -48,6 +48,24 @@
                              {:firstName first-name :lastName last-name}])
                   {:firstName first-name :lastName last-name})))
 
-(reg-event-db :show-error (fn [_db msg] (prn msg) (show-error msg)))
+(reg-event-fx :show-error
+              (fn [_db [_ msg]] {:alert msg}))
 
 (reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
+
+(reg-event-fx ::api-get
+              (fn [{db :db} [_ url]]
+                {:fetch
+                     {:url        (str host url)
+                      :on-success [:process-response]
+                      :on-failure [:show-error]}
+                 :db (assoc db :loading? true)})))
+
+(reg-event-fx ::api-post
+              (fn [_world [_ url body]]
+                {:fetch {:method     "POST"
+                         :url        (str host url)
+                         :body       body
+                         :on-success [:process-response]
+                         :on-failure [:show-error]}
+                 :db (assoc db :loading? true)})))

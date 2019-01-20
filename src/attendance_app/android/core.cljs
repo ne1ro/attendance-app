@@ -4,8 +4,7 @@
     [re-frame.core :refer [subscribe dispatch dispatch-sync]]
     [attendance-app.utils :refer [current-day]]
     [attendance-app.android.attendant-form :refer [attendant-form]]
-    [attendance-app.android.list-attendants :refer [list-attendants]]
-    [attendance-app.effects]))
+    [attendance-app.android.list-attendants :refer [list-attendants]]))
 
 (def react-navigation (js/require "react-navigation"))
 (def ReactNative (js/require "react-native"))
