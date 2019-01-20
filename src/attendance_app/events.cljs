@@ -27,10 +27,10 @@
 
 ; -- Handlers --
 (reg-event-fx :list-attendants
-              (fn [_ [_ day]] {:dispatch [::api-get (str "attendances/" day)]}))
+              (fn [_ [_ day]] {:dispatch [::api-get :attendants (str "attendances/" day)]}))
 
 (reg-event-db :process-response
-              (fn [db [_ [db-key response]]]
+              (fn [db [_ db-key response]]
                 (-> db (assoc db-key response) (assoc :loading? false))))
 
 (reg-event-db :set-attendant-first-name
@@ -44,6 +44,7 @@
                 ; TODO: use navigation func
                 (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
                   (dispatch [::api-post
+                             :attendant-form
                              "attendants"
                              {:firstName first-name :lastName last-name}])
                   {:firstName first-name :lastName last-name})))
@@ -54,18 +55,20 @@
 (reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
 
 (reg-event-fx ::api-get
-              (fn [{db :db} [_ url]]
+              (fn [{db :db} [_ db-key url]]
                 {:fetch
                      {:url        (str host url)
+                      :db-key     db-key
                       :on-success [:process-response]
                       :on-failure [:show-error]}
-                 :db (assoc db :loading? true)})))
+                 :db (assoc db :loading? true)}))
 
 (reg-event-fx ::api-post
-              (fn [_world [_ url body]]
+              (fn [{db :db} [_ url db-key body]]
                 {:fetch {:method     "POST"
+                         :db-key     db-key
                          :url        (str host url)
                          :body       body
                          :on-success [:process-response]
                          :on-failure [:show-error]}
-                 :db (assoc db :loading? true)})))
+                 :db    (assoc db :loading? true)}))
