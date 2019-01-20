@@ -31,6 +31,8 @@
 
 (reg-event-db :process-response
               (fn [db [_ db-key response]]
+                (if (contains? response :errors)
+                  (dispatch [:show-error (:errors response)]))
                 (-> db (assoc db-key response) (assoc :loading? false))))
 
 (reg-event-db :set-attendant-first-name
@@ -39,15 +41,15 @@
 (reg-event-db :set-attendant-last-name
               (fn [db [_ value]] (assoc db :attendant-last-name value)))
 
-(reg-event-db :create-attendant
-              (fn [db [_ navigate]]
-                ; TODO: use navigation func
-                (let [{first-name :attendant-first-name last-name :attendant-last-name} db]
-                  (dispatch [::api-post
-                             :attendant-form
-                             "attendants"
-                             {:firstName first-name :lastName last-name}])
-                  {:firstName first-name :lastName last-name})))
+; TODO: use navigation func
+(reg-event-fx :create-attendant
+              (fn [{db :db} [_ navigate]]
+                (let [{:keys [attendant-first-name attendant-last-name]} db]
+                  {:dispatch [::api-post
+                              :attendant-form
+                              "attendants"
+                              {:firstName attendant-first-name :lastName attendant-last-name}]
+                   :db       (dissoc db :attendant-first-name :attendant-last-name)})))
 
 (reg-event-fx :show-error
               (fn [_db [_ msg]] {:alert msg}))
@@ -64,11 +66,11 @@
                  :db (assoc db :loading? true)}))
 
 (reg-event-fx ::api-post
-              (fn [{db :db} [_ url db-key body]]
+              (fn [{db :db} [_ db-key url body]]
                 {:fetch {:method     "POST"
                          :db-key     db-key
                          :url        (str host url)
-                         :body       body
+                         :body       (.stringify js/JSON (clj->js body))
                          :on-success [:process-response]
                          :on-failure [:show-error]}
                  :db    (assoc db :loading? true)}))

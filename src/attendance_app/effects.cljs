@@ -25,6 +25,5 @@
       #(-> on-success (conj db-key %) dispatch)
       #(-> on-failure (conj %) dispatch))))
 
-(reg-fx :alert
-        (fn [msg] (a/alert "Request Error" msg)))
+(reg-fx :alert (fn [msg] (a/alert "Request Error" msg)))
 (reg-fx :fetch fetch-effect)

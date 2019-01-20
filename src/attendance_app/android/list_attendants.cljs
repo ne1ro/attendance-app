@@ -41,8 +41,7 @@
      [view {:style (:dot-container styles)} [view {:style (set-dot-style status)}]]
 
      [view {:style {:flex-direction "column" :flex 0.75}}
-      [text {:style (:headline styles)}
-       (str lastName " " firstName)]]]))
+      [text {:style (:headline styles)} (str lastName " " firstName)]]]))
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
