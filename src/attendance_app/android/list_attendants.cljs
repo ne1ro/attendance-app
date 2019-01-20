@@ -35,19 +35,17 @@
   (let [color (case status "attended" (:complementary colors) (:accent colors))]
     (-> styles :dot (assoc :background-color color))))
 
-(defn- attendant-row [a]
-  (let [{:keys [firstName lastName status]} a]
-    [view {:style (:attendant-row styles)}
+(defn- attendant-row [{:keys [firstName lastName status]}]
+  [view {:style (:attendant-row styles)}
      [view {:style (:dot-container styles)} [view {:style (set-dot-style status)}]]
 
      [view {:style {:flex-direction "column" :flex 0.75}}
-      [text {:style (:headline styles)} (str lastName " " firstName)]]]))
+      [text {:style (:headline styles)} (str lastName " " firstName)]]])
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
         day (.getParam navigation "day" "2019-02-01")]
-    (fn []
-      [view {:style (:container styles)}
+    [view {:style (:container styles)}
        [fab (partial (.-navigate navigation) "AttendantForm")]
 
        (if (or (empty? @attendants) (not (vector? @attendants)))
@@ -62,4 +60,4 @@
            {:data          @attendants
             :style         {:padding-top 20}
             :key-extractor (fn [item _] (-> item ->clj :id str))
-            :render-item   (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])])))
+            :render-item   (fn [a] (-> a (->clj) :item (attendant-row) (r/as-element)))}]])]))

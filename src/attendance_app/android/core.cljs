@@ -23,11 +23,13 @@
                              :navigationOptions {:title "Create an attendant"}}})
 
 (def app-navigator
-  (createStackNavigator (clj->js routes)
-                        (clj->js
-                         {:initialRouteName "AttendantsList"
-                          :initialRouteParams {:day (current-day "yyyy-MM-dd")}
-                          :defaultNavigationOptions default-nav-options})))
+  (let [routing (subscribe :routing)]
+    (createStackNavigator
+      (clj->js routes)
+      (clj->js
+        {:initialRouteName         "AttendantsList"
+         :initialRouteParams       {:day (current-day "yyyy-MM-dd")}
+         :defaultNavigationOptions default-nav-options}))))
 
 (defn app-root [] [:> (createAppContainer app-navigator) {}])
 

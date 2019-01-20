@@ -2,11 +2,10 @@
   (:require [clojure.spec.alpha :as s]))
 
 ;; spec of app-db
-(s/def ::greeting string?)
+(s/def ::attendants list?)
 (s/def ::app-db
-  (s/keys :req-un [::greeting]))
+  (s/keys :req-un []))
 
 ;; initial state of app-db
 (def app-db
-  {:greeting "Attendance" :attendants [] :loading? false
-   :attendant-first-name "" :attendant-last-name ""})
+  {:attendants [] :loading? false :attendant-first-name "" :attendant-last-name "" :routing {}})

@@ -17,13 +17,12 @@
       (.then #(handle-response % success-handler))
       (.catch #(-> % .-message err-handler)))))
 
-(defn- fetch-effect [params]
-  (let [{:keys [url db-key on-success on-failure]} params]
-    (fetch
-      url
-      params
-      #(-> on-success (conj db-key %) dispatch)
-      #(-> on-failure (conj %) dispatch))))
+(defn- fetch-effect [{:keys [url db-key on-success on-failure] :as params}]
+  (fetch
+    url
+    params
+    #(-> on-success (conj db-key %) dispatch)
+    #(-> on-failure (conj %) dispatch)))
 
 (reg-fx :alert (fn [msg] (a/alert "Request Error" msg)))
 (reg-fx :fetch fetch-effect)
