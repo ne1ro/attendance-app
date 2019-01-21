@@ -16,12 +16,11 @@
   (.alert (.-Alert ReactNative) title))
 
 (defn app-root []
-  (let [greeting (subscribe [:get-greeting])]
-    (fn []
-      [view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
-       [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
-                             :on-press #(alert "Attended!")}
-        [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "Attend"]]])))
+  (fn []
+    [view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
+     [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
+                           :on-press #(alert "Attended!")}
+      [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "Attend"]]]))
 
 (defn init []
   (dispatch-sync [:initialize-db])

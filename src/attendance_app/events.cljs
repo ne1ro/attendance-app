@@ -1,10 +1,10 @@
 (ns attendance-app.events
   (:require
-    [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
-    [clojure.spec.alpha :as s]
-    [attendance-app.effects]
-    [attendance-app.utils :refer [current-day]]
-    [attendance-app.db :as db :refer [app-db]]))
+   [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
+   [clojure.spec.alpha :as s]
+   [attendance-app.effects]
+   [attendance-app.utils :refer [current-day]]
+   [attendance-app.db :as db :refer [app-db]]))
 
 ; TODO: get from config
 (def host "http://10.0.2.2:3000/")
@@ -41,7 +41,6 @@
 (reg-event-db :set-attendant-last-name
               (fn [db [_ value]] (assoc db :attendant-last-name value)))
 
-; TODO: use navigation func
 (reg-event-fx :create-attendant
               (fn [{db :db} [_ navigate]]
                 (let [{:keys [attendant-first-name attendant-last-name]} db]
@@ -51,18 +50,19 @@
                               {:firstName attendant-first-name :lastName attendant-last-name}]
                    :db       (dissoc db :attendant-first-name :attendant-last-name)})))
 
-(reg-event-fx :show-error
-              (fn [_db [_ msg]] {:alert msg}))
+(reg-event-fx :show-error (fn [_db [_ msg]] {:alert msg}))
 
 (reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
+
+(reg-event-fx :navigate (fn [_db [_ navigate address]] {:navigate {:nav-func navigate :address address}}))
 
 (reg-event-fx ::api-get
               (fn [{db :db} [_ db-key url]]
                 {:fetch
-                     {:url        (str host url)
-                      :db-key     db-key
-                      :on-success [:process-response]
-                      :on-failure [:show-error]}
+                 {:url        (str host url)
+                  :db-key     db-key
+                  :on-success [:process-response]
+                  :on-failure [:show-error]}
                  :db (assoc db :loading? true)}))
 
 (reg-event-fx ::api-post

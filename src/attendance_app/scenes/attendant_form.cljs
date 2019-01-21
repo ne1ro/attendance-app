@@ -1,4 +1,4 @@
-(ns attendance-app.android.attendant-form
+(ns attendance-app.scenes.attendant-form
   (:require [reagent.core :as r :refer [atom]]
             [re-frame.core :refer [subscribe dispatch]]
             [attendance-app.colors :refer [colors]]))
