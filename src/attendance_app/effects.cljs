@@ -1,6 +1,6 @@
 (ns attendance-app.effects
   (:require
-   [re-frame.core :refer [reg-fx dispatch]]
+   [re-frame.core :refer [reg-fx]]
    [attendance-app.alert :as a]))
 
 (defn- handle-response [resp success-handler]
@@ -9,21 +9,14 @@
    .json
    (.then (fn [data] (success-handler (js->clj data :keywordize-keys true))))))
 
-(defn- fetch [url params success-handler err-handler]
+(defn- fetch [{:keys [url on-success on-failure] :as params}]
   (let [default-params {:method "GET" :headers {"Content-Type" "application/json"}}]
     (->
      url
      (js/fetch (clj->js (merge default-params params)))
-     (.then #(handle-response % success-handler))
-     (.catch #(-> % .-message err-handler)))))
-
-(defn- fetch-effect [{:keys [url db-key on-success on-failure] :as params}]
-  (fetch
-   url
-   params
-   #(-> on-success (conj db-key %) dispatch)
-   #(-> on-failure (conj %) dispatch)))
+     (.then #(handle-response % on-success))
+     (.catch #(-> % .-message on-failure)))))
 
 (reg-fx :alert (fn [msg] (a/alert "Request Error" msg)))
-(reg-fx :fetch fetch-effect)
+(reg-fx :fetch fetch)
 (reg-fx :navigate (fn [{:keys [nav-func address]}] (nav-func address)))

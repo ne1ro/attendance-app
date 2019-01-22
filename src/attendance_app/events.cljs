@@ -43,11 +43,13 @@
 
 (reg-event-fx :create-attendant
               (fn [{db :db} [_ navigate]]
-                (let [{:keys [attendant-first-name attendant-last-name]} db]
-                  {:dispatch [::api-post
-                              :attendant-form
-                              "attendants"
-                              {:firstName attendant-first-name :lastName attendant-last-name}]
+                (let [{:keys [attendant-first-name attendant-last-name]} db
+                      on-success #(doseq [event [[:process-response :attendant-form %]
+                                                 [:list-attendants (current-day "yyyy-MM-dd")]
+                                                 [:navigate navigate "AttendantsList"]]]
+                                    (dispatch event))
+                      attendant-form {:firstName attendant-first-name :lastName attendant-last-name}]
+                  {:dispatch [::api-post "attendants" attendant-form on-success]
                    :db       (dissoc db :attendant-first-name :attendant-last-name)})))
 
 (reg-event-fx :show-error (fn [_db [_ msg]] {:alert msg}))
@@ -60,17 +62,15 @@
               (fn [{db :db} [_ db-key url]]
                 {:fetch
                  {:url        (str host url)
-                  :db-key     db-key
-                  :on-success [:process-response]
-                  :on-failure [:show-error]}
+                  :on-success #(dispatch [:process-response db-key %])
+                  :on-failure #(dispatch [:show-error %])}
                  :db (assoc db :loading? true)}))
 
 (reg-event-fx ::api-post
-              (fn [{db :db} [_ db-key url body]]
+              (fn [{db :db} [_ url body on-success]]
                 {:fetch {:method     "POST"
-                         :db-key     db-key
                          :url        (str host url)
                          :body       (.stringify js/JSON (clj->js body))
-                         :on-success [:process-response]
-                         :on-failure [:show-error]}
+                         :on-success on-success
+                         :on-failure #(dispatch [:show-error %])}
                  :db    (assoc db :loading? true)}))
