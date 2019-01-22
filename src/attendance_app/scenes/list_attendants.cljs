@@ -10,7 +10,7 @@
 
 (def ReactNative (js/require "react-native"))
 (def typography (.-material (js/require "react-native-typography")))
-
+(def gesture-recognizer (r/adapt-react-class (.-default (js/require "react-native-swipe-gestures"))))
 (def text (r/adapt-react-class (.-Text ReactNative)))
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def toolbar (r/adapt-react-class (.-ToolbarAndroid ReactNative)))
@@ -23,21 +23,25 @@
    :display1      (-> typography .-display1 ->clj (assoc :text-align "center"))
    :headline      (.-headline typography)
    :container     {:flex 1 :color (:text colors) :padding-horizontal 20 :padding-vertical 15}
+   :dot           {:height 16 :width 16 :border-radius 8}
+   :fab           {:font-size 28 :font-weight "400" :color "#FFF"}
+   :attendant-row {:flex-direction "row" :padding-horizontal 20 :padding-vertical 15}
    :dot-container {:flex-direction     "column"
                    :flex               0.2
                    :align-items        "flex-end"
                    :justify-content    "center"
-                   :padding-horizontal 8}
-   :dot           {:height 16 :width 16 :border-radius 8}
-   :fab           {:font-size 28 :font-weight "400" :color "#FFF"}
-   :attendant-row {:flex-direction "row" :padding-horizontal 20 :padding-vertical 15}})
+                   :padding-horizontal 8}})
 
 (defn- set-dot-style [status]
   (let [color (case status "attended" (:complementary colors) (:accent colors))]
     (-> styles :dot (assoc :background-color color))))
 
-(defn- attendant-row [{:keys [firstName lastName status]}]
-  [view {:style (:attendant-row styles)}
+(defn- attendant-row [{:keys [id firstName lastName status]}]
+  [gesture-recognizer
+   {:style          (:attendant-row styles)
+    :on-swipe-left  #(dispatch [:delete-attendant id])
+    :on-swipe-right #(dispatch [:delete-attendant id])}
+
    [view {:style (:dot-container styles)} [view {:style (set-dot-style status)}]]
 
    [view {:style {:flex-direction "column" :flex 0.8}}
@@ -50,7 +54,7 @@
      (let [floating-action-button (fab #(dispatch [:navigate (.-navigate navigation) "AttendantForm"]))]
        [floating-action-button [text {:style (:fab styles)} "+"]])
 
-     (if (or (empty? @attendants) (not (vector? @attendants)))
+     (if (or (empty? @attendants) (not (sequential? @attendants)))
        [view
         [text {:style (:title styles)} "There is no one to attend :("]
         [text {:style (-> styles :subheading (assoc :padding-top 20))}

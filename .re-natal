@@ -8,7 +8,8 @@
   "modules": [
     "react-native-typography",
     "react-native-material-kit",
-    "react-navigation"
+    "react-navigation",
+    "react-native-swipe-gestures"
   ],
   "imageDirs": [
     "images"

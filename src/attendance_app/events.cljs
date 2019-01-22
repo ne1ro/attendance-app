@@ -1,13 +1,15 @@
 (ns attendance-app.events
   (:require
-   [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
-   [clojure.spec.alpha :as s]
-   [attendance-app.effects]
-   [attendance-app.utils :refer [current-day]]
-   [attendance-app.db :as db :refer [app-db]]))
+    [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
+    [clojure.spec.alpha :as s]
+    [attendance-app.effects]
+    [attendance-app.utils :refer [current-day]]
+    [attendance-app.db :as db :refer [app-db]]))
 
 ; TODO: get from config
 (def host "http://10.0.2.2:3000/")
+
+(defn- eq-id? [id1 {id2 :id}] (= id1 id2))
 
 ;; -- Interceptors ------------------------------------------------------------
 ;;
@@ -26,20 +28,27 @@
     []))
 
 ; -- Handlers --
-(reg-event-fx :list-attendants
-              (fn [_ [_ day]] {:dispatch [::api-get :attendants (str "attendances/" day)]}))
-
 (reg-event-db :process-response
               (fn [db [_ db-key response]]
                 (if (contains? response :errors)
                   (dispatch [:show-error (:errors response)]))
                 (-> db (assoc db-key response) (assoc :loading? false))))
 
+(reg-event-fx :show-error (fn [_db [_ msg]] {:alert msg}))
+
+(reg-event-fx :list-attendants
+              (fn [_ [_ day]] {:dispatch [::api-get :attendants (str "attendances/" day)]}))
+
 (reg-event-db :set-attendant-first-name
               (fn [db [_ value]] (assoc db :attendant-first-name value)))
 
 (reg-event-db :set-attendant-last-name
               (fn [db [_ value]] (assoc db :attendant-last-name value)))
+
+(reg-event-fx :delete-attendant
+              (fn [{db :db} [_ id]]
+                {:dispatch [::api-delete (str "attendants/" id) prn]
+                 :db       (update db :attendants #(remove (partial eq-id? id) %))}))
 
 (reg-event-fx :create-attendant
               (fn [{db :db} [_ navigate]]
@@ -52,25 +61,30 @@
                   {:dispatch [::api-post "attendants" attendant-form on-success]
                    :db       (dissoc db :attendant-first-name :attendant-last-name)})))
 
-(reg-event-fx :show-error (fn [_db [_ msg]] {:alert msg}))
-
 (reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
 
-(reg-event-fx :navigate (fn [_db [_ navigate address]] {:navigate {:nav-func navigate :address address}}))
+(reg-event-fx :navigate
+              (fn [_db [_ navigate address]] {:navigate {:nav-func navigate :address address}}))
 
 (reg-event-fx ::api-get
               (fn [{db :db} [_ db-key url]]
-                {:fetch
-                 {:url        (str host url)
-                  :on-success #(dispatch [:process-response db-key %])
-                  :on-failure #(dispatch [:show-error %])}
-                 :db (assoc db :loading? true)}))
+                {:fetch {:url        (str host url)
+                         :on-success #(dispatch [:process-response db-key %])
+                         :on-failure #(dispatch [:show-error %])}
+                 :db    (assoc db :loading? true)}))
 
 (reg-event-fx ::api-post
               (fn [{db :db} [_ url body on-success]]
                 {:fetch {:method     "POST"
                          :url        (str host url)
                          :body       (.stringify js/JSON (clj->js body))
-                         :on-success on-success
+                         :on-success #(dispatch [:process-response nil])
                          :on-failure #(dispatch [:show-error %])}
                  :db    (assoc db :loading? true)}))
+
+(reg-event-fx ::api-delete
+              (fn [_ [_ url on-success]]
+                {:fetch {:method     "DELETE"
+                         :url        (str host url)
+                         :on-success on-success
+                         :on-failure #(dispatch [:show-error %])}}))
