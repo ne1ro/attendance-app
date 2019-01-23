@@ -10,4 +10,4 @@
      title
      message
      (clj->js [{:text "OK" :onPress on-ok} {:text "Cancel" :onPress on-cancel :style "cancel"}])
-     #js{:cancelable false})))
+     (clj->js {:cancelable false}))))

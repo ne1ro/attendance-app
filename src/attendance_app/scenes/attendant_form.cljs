@@ -14,8 +14,8 @@
       .-mdl
       .-Textfield
       .textfield
-      (.withStyle #js{:paddingVertical 20 :width 220})
-      (.withTextInputStyle #js{:color (:white colors) :fontSize 24 :textAlign "center"})
+      (.withStyle (clj->js  {:paddingVertical 20 :width 220}))
+      (.withTextInputStyle (clj->js  {:color (:white colors) :fontSize 24 :textAlign "center"}))
       .build
       r/adapt-react-class))
 
@@ -25,8 +25,8 @@
       .accentColoredFlatButton
       (.withBackgroundColor (:accent colors))
       (.withText "SUBMIT")
-      (.withStyle #js{:width 120 :marginTop 20})
-      (.withTextStyle #js{:color (:white colors) :fontSize 18})
+      (.withStyle (clj->js  {:width 120 :marginTop 20}))
+      (.withTextStyle (clj->js {:color (:white colors) :fontSize 18}))
       (.build)
       (r/adapt-react-class)))
 

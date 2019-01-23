@@ -2,6 +2,8 @@
 
 Attendance Mobile Application built in Clojure
 
+[![Build Status](https://travis-ci.org/ne1ro/attendance-app.svg?branch=master)](https://travis-ci.org/ne1ro/attendance-app)
+
 ## Usage
 
 ```

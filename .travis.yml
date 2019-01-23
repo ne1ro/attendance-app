@@ -1,0 +1,11 @@
+language: clojure
+lein: lein
+script: lein do clean, check, kibit, eastwood, test
+jdk:
+  - oraclejdk8
+  - openjdk11
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.cljs
+    - node_modules
