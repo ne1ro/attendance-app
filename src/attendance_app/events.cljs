@@ -36,6 +36,17 @@
 
 (reg-event-fx :show-error (fn [_db [_ msg]] {:alert {:message msg :title "Request Error"}}))
 
+(reg-event-fx :create-attendant
+              (fn [{db :db} [_ navigate]]
+                (let [{:keys [attendant-first-name attendant-last-name]} db
+                      on-success #(doseq [event [[:process-response :attendant-form %]
+                                                 [:list-attendants (current-day "yyyy-MM-dd")]
+                                                 [:navigate navigate "AttendantsList"]]]
+                                    (dispatch event))
+                      attendant-form {:firstName attendant-first-name :lastName attendant-last-name}]
+                  {:dispatch [::api-post "attendants" attendant-form on-success]
+                   :db       (dissoc db :attendant-first-name :attendant-last-name)})))
+
 (reg-event-fx :list-attendants
               (fn [_ [_ day]] {:dispatch [::api-get :attendants (str "attendances/" day)]}))
 
@@ -57,16 +68,21 @@
                 {:dispatch [::api-delete (str "attendants/" id) prn]
                  :db       (update db :attendants #(remove (partial eq-id? id) %))}))
 
-(reg-event-fx :create-attendant
-              (fn [{db :db} [_ navigate]]
-                (let [{:keys [attendant-first-name attendant-last-name]} db
-                      on-success #(doseq [event [[:process-response :attendant-form %]
-                                                 [:list-attendants (current-day "yyyy-MM-dd")]
-                                                 [:navigate navigate "AttendantsList"]]]
-                                    (dispatch event))
-                      attendant-form {:firstName attendant-first-name :lastName attendant-last-name}]
-                  {:dispatch [::api-post "attendants" attendant-form on-success]
-                   :db       (dissoc db :attendant-first-name :attendant-last-name)})))
+(defn- find-index [attendants id]
+  (->> attendants (filter (partial eq-id? id)) first (.indexOf attendants)))
+
+(defn- toggle-status [attendant]
+  (update attendant :status #(if (= "unattended" %) "attended" "unattended")))
+
+(reg-event-fx :toggle-attendance
+              (fn [{db :db} [_ {:keys [id status]} day]]
+                (let [url (str "attendants/" id "/attendances")
+                      update-status #(update % (find-index % id) toggle-status)]
+                  (if (= "unattended" status)
+                    {:dispatch [::api-post url {:status true :day day} prn]
+                     :db       (update db :attendants update-status)}
+                    {:dispatch [::api-delete (str url "/" day) prn]
+                     :db       (update db :attendants update-status)}))))
 
 (reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
 
@@ -85,7 +101,7 @@
                 {:fetch {:method     "POST"
                          :url        (str host url)
                          :body       (.stringify js/JSON (clj->js body))
-                         :on-success #(dispatch [:process-response nil])
+                         :on-success on-success
                          :on-failure #(dispatch [:show-error %])}
                  :db    (assoc db :loading? true)}))
 
