@@ -50,6 +50,10 @@
 (reg-event-fx :list-attendants
               (fn [_ [_ day]] {:dispatch [::api-get :attendants (str "attendances/" day)]}))
 
+(reg-event-fx :get-attendant
+              (fn [_ [_ id]]
+                {:dispatch [::api-get :attendant (str "attendants/" id)]}))
+
 (reg-event-db :set-attendant-first-name
               (fn [db [_ value]] (assoc db :attendant-first-name value)))
 

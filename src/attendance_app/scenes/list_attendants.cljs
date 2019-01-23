@@ -15,7 +15,6 @@
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def toolbar (r/adapt-react-class (.-ToolbarAndroid ReactNative)))
 (def flat-list (r/adapt-react-class (.-FlatList ReactNative)))
-(def image (r/adapt-react-class (.-Image ReactNative)))
 (def touchable-feedback (r/adapt-react-class (.-TouchableNativeFeedback ReactNative)))
 
 (def styles
