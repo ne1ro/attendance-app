@@ -34,7 +34,7 @@
                   (dispatch [:show-error (:errors response)]))
                 (-> db (assoc db-key response) (assoc :loading? false))))
 
-(reg-event-fx :show-error (fn [_db [_ msg]] {:alert msg}))
+(reg-event-fx :show-error (fn [_db [_ msg]] {:alert {:message msg :title "Request Error"}}))
 
 (reg-event-fx :list-attendants
               (fn [_ [_ day]] {:dispatch [::api-get :attendants (str "attendances/" day)]}))
@@ -44,6 +44,13 @@
 
 (reg-event-db :set-attendant-last-name
               (fn [db [_ value]] (assoc db :attendant-last-name value)))
+
+(reg-event-fx :show-delete-dialogue
+              (fn [_ [_ id]]
+                {:alert {:title     "Are you sure about removal?"
+                         :message   "This will remove all attendances and can't be undone"
+                         :on-ok     #(dispatch [:delete-attendant id])
+                         :on-cancel #(prn "Canceled")}}))
 
 (reg-event-fx :delete-attendant
               (fn [{db :db} [_ id]]

@@ -17,6 +17,7 @@
      (.then #(handle-response % on-success))
      (.catch #(-> % .-message on-failure)))))
 
-(reg-fx :alert (fn [msg] (a/alert "Request Error" msg)))
 (reg-fx :fetch fetch)
 (reg-fx :navigate (fn [{:keys [nav-func address]}] (nav-func address)))
+(reg-fx :alert
+        (fn [{:keys [title message on-ok on-cancel]}] (a/alert title message on-ok on-cancel)))

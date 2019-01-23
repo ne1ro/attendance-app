@@ -39,8 +39,8 @@
 (defn- attendant-row [{:keys [id firstName lastName status]}]
   [gesture-recognizer
    {:style          (:attendant-row styles)
-    :on-swipe-left  #(dispatch [:delete-attendant id])
-    :on-swipe-right #(dispatch [:delete-attendant id])}
+    :on-swipe-left  #(dispatch [:show-delete-dialogue id])
+    :on-swipe-right #(dispatch [:show-delete-dialogue id])}
 
    [view {:style (:dot-container styles)} [view {:style (set-dot-style status)}]]
 
