@@ -3,10 +3,9 @@
             [re-frame.core :refer [dispatch subscribe]]
             [attendance-app.float-action-button :refer [fab]]
             [attendance-app.colors :refer [colors]]
+            [attendance-app.utils :refer [->clj]]
             [attendance-app.events]
             [attendance-app.subs]))
-
-(defn- ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
 
 (def ReactNative (js/require "react-native"))
 (def typography (.-material (js/require "react-native-typography")))

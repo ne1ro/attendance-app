@@ -14,9 +14,10 @@
 (def app-registry (.-AppRegistry ReactNative))
 
 (def default-nav-options
-  {:headerStyle      {:backgroundColor "#3F51B5" :elevation 4 :shadowOpacity 100}
+  {:headerStyle      {:backgroundColor "#3F51B5" :elevation 4 :overflow "visible"}
    :headerTitleStyle {:color "#FFFFFF"}
-   :id               0
+   :headerTintColor  {:color "#FFFFF"}
+   :id               4
    :day              (current-day "E d 'of' MMMM")})
 
 (def routes {:AttendantsList {:screen            (r/reactify-component list-attendants)
@@ -31,7 +32,7 @@
    (clj->js routes)
    (clj->js
      {:initialRouteName        "Attendant"
-      :initialRouteParams      {:id 7}
+      :initialRouteParams      {:id 4}
      :defaultNavigationOptions default-nav-options})))
 
 (defn app-root [] [:> (createAppContainer app-navigator) {}])

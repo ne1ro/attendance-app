@@ -4,3 +4,5 @@
 
 ; TODO: make it co-effect
 (defn current-day [fmt] (time-format/unparse (time-format/formatter fmt) (time/now)))
+
+(defn ->clj [js-obj] (js->clj js-obj :keywordize-keys true))
