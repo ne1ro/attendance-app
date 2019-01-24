@@ -62,7 +62,7 @@
      (let [floating-action-button (fab #(dispatch [:navigate navigate "AttendantForm"]))]
        [floating-action-button [text {:style (:fab styles)} "+"]])
 
-     (if (or (empty? @attendants) (not (sequential? @attendants)))
+     (if (seq @attendants)
        [view
         [text {:style (:title styles)} "There is no one to attend :("]
         [text {:style (-> styles :subheading (assoc :padding-top 15))}

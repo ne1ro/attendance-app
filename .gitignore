@@ -69,3 +69,5 @@ figwheel_server.log
 
 .cljs_*
 .lein-repl-history
+nashorn*
+.nrepl-port
