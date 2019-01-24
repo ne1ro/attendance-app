@@ -1,6 +1,6 @@
 language: clojure
 lein: lein
-script: lein do clean, check, kibit, eastwood, test
+script: lein do check, kibit, eastwood, test
 jdk:
   - oraclejdk8
   - openjdk11

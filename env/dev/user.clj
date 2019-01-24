@@ -1,5 +1,5 @@
 (ns user
-  (:use [figwheel-sidecar.repl-api :as ra]))
+  (:require [figwheel-sidecar.repl-api :as ra]))
 ;; This namespace is loaded automatically by nREPL
 
 ;; read project.clj to get build configs
