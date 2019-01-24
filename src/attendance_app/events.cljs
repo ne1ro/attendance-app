@@ -28,6 +28,8 @@
     []))
 
 ; -- Handlers --
+(reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
+
 (reg-event-db :process-response
               (fn [db [_ db-key response]]
                 (if (contains? response :errors)
@@ -51,8 +53,8 @@
               (fn [_ [_ day]] {:dispatch [::api-get :attendants (str "attendances/" day)]}))
 
 (reg-event-fx :get-attendant
-              (fn [_ [_ id]]
-                {:dispatch [::api-get :attendant (str "attendants/" id)]}))
+              (fn [_ [_ navigate id]]
+                {:dispatch-n [[:navigate navigate "Attendant"] [::api-get :attendant (str "attendants/" id)]]}))
 
 (reg-event-db :set-attendant-first-name
               (fn [db [_ value]] (assoc db :attendant-first-name value)))
@@ -87,8 +89,6 @@
                      :db       (update db :attendants update-status)}
                     {:dispatch [::api-delete (str url "/" day) prn]
                      :db       (update db :attendants update-status)}))))
-
-(reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
 
 (reg-event-fx :navigate
               (fn [_db [_ navigate address]] {:navigate {:nav-func navigate :address address}}))

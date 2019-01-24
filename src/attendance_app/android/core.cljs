@@ -15,8 +15,8 @@
 
 (def default-nav-options
   {:headerStyle      {:backgroundColor "#3F51B5" :elevation 4 :overflow "visible"}
-   :headerTitleStyle {:color "#FFFFFF"}
-   :headerTintColor  {:color "#FFFFF"}
+   :headerTitleStyle {:color "white"}
+   :headerTintColor  "white"
    :id               4
    :day              (current-day "E d 'of' MMMM")})
 
@@ -31,8 +31,8 @@
   (createStackNavigator
    (clj->js routes)
    (clj->js
-     {:initialRouteName        "Attendant"
-      :initialRouteParams      {:id 4}
+     {:initialRouteName        "AttendantsList"
+      :initialRouteParams      {:day (current-day "yyyy-MM-dd")}
      :defaultNavigationOptions default-nav-options})))
 
 (defn app-root [] [:> (createAppContainer app-navigator) {}])

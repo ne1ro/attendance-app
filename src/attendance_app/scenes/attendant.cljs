@@ -5,15 +5,12 @@
             [attendance-app.colors :refer [colors]]))
 
 (def ReactNative (js/require "react-native"))
-
 (def text (r/adapt-react-class (.-Text ReactNative)))
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def typography (.-material (js/require "react-native-typography")))
 
 (def styles
-  {:subheading     (-> typography .-subheading ->clj)
-   :title          (-> typography .-title ->clj)
-   :display1       (-> typography .-display1 ->clj (assoc :text-align "center" :color (:white colors)))
+  {:display1       (-> typography .-display1 ->clj (assoc :text-align "center" :color (:white colors)))
    :body2          (-> typography .-body1 ->clj)
    :container      {:flex 1 :justify-content "flex-start" :align-items "center" :width "100%" :elevation 0}
    :header         {:background-color (:accent colors) :width "100%" :height "33%" :justify-content "center" :elevation 1}
@@ -32,9 +29,7 @@
    [text {:style (pick-styles [:body2 :align-left :secondary-text])} (str caption ": ")]
    [text {:style (pick-styles [:body2 :align-right :bold])} value]])
 
-(defn attendant [{navigation :navigation}]
-  (dispatch [:get-attendant (.getParam navigation "id" nil)])
-
+(defn attendant [_]
   (let [attendant (subscribe [:get-attendant])]
     (if @attendant
       [view {:style (:container styles)}
