@@ -3,9 +3,10 @@
             [re-frame.core :refer [dispatch subscribe]]
             [attendance-app.float-action-button :refer [fab]]
             [attendance-app.colors :refer [colors]]
-            [attendance-app.utils :refer [->clj]]
-            [attendance-app.events]
-            [attendance-app.subs]))
+            [attendance-app.utils :refer [format-day ->clj]]
+            [clojure.string :as str]
+            [cljs-time.core :as time]
+            [cljs-time.format :as format]))
 
 (def ReactNative (js/require "react-native"))
 (def typography (.-material (js/require "react-native-typography")))
@@ -53,7 +54,8 @@
 
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
-        day (.getParam navigation "day" "2019-02-01")
+        day (.getParam navigation "day" "2019-01-01")
+        title (->> day (format/parse (format/formatter "yyyy-MM-dd")) (format-day "E d 'of' MMMM"))
         navigate (.-navigate navigation)]
 
     [view {:style (:container styles)}
@@ -66,7 +68,7 @@
         [text {:style (-> styles :subheading (assoc :padding-top 15))}
          "Would you like to add someone?"]]
 
-       [view [text {:style (:display1 styles)} "This day attendants"]
+       [view [text {:style (:display1 styles)} title]
 
         [flat-list
          {:data          @attendants

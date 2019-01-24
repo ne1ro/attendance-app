@@ -18,6 +18,9 @@
      (.catch #(-> % .-message on-failure)))))
 
 (reg-fx :fetch fetch)
-(reg-fx :navigate (fn [{:keys [nav-func address]}] (nav-func address)))
+(reg-fx :navigate (fn [{:keys [nav-func address params]}] (nav-func address params)))
 (reg-fx :alert
-        (fn [{:keys [title message on-ok on-cancel]}] (a/alert title message on-ok on-cancel)))
+        (fn [{:keys [title message on-ok on-cancel]}]
+          (if on-ok
+            (a/alert title message on-ok on-cancel)
+            (a/alert title message))))

@@ -6,8 +6,8 @@
   ([title message] (.alert Alert title message))
   ([title message on-ok on-cancel]
    (.alert
-     Alert
-     title
-     message
-     (clj->js [{:text "OK" :onPress on-ok} {:text "Cancel" :onPress on-cancel :style "cancel"}])
-     (clj->js {:cancelable false}))))
+    Alert
+    title
+    message
+    (clj->js [{:text "OK" :onPress on-ok} {:text "Cancel" :onPress on-cancel :style "cancel"}])
+    (clj->js {:cancelable false}))))
