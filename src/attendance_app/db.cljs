@@ -8,4 +8,5 @@
 
 ;; initial state of app-db
 (def app-db
-  {:attendants [] :loading? false :attendant-first-name "" :attendant-last-name "" :attendant {} :attendances-days []})
+  {:attendants [] :loading? false :attendant-first-name "" :attendant-last-name "" :attendant {} :attendances-days []
+   :token      nil})
