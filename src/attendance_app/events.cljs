@@ -1,10 +1,10 @@
 (ns attendance-app.events
   (:require
-   [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
-   [clojure.spec.alpha :as s]
-   [attendance-app.effects]
-   [attendance-app.utils :refer [current-day]]
-   [attendance-app.db :as db :refer [app-db]]))
+    [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
+    [clojure.spec.alpha :as s]
+    [attendance-app.effects]
+    [attendance-app.utils :refer [current-day]]
+    [attendance-app.db :as db :refer [app-db]]))
 
 ; TODO: get from config
 (def host "http://10.0.2.2:3000/")
@@ -30,6 +30,15 @@
 ; -- Handlers --
 (reg-event-db :initialize-db validate-spec (fn [_ _] app-db))
 
+(reg-event-fx :check-access-token
+              (fn [{db :db} [_ navigate]]
+                (when (-> db :token empty? not)
+                  (let [day (current-day "yyyy-MM-dd")]
+                    {:dispatch [:list-attendants day]
+                     :navigate {:nav-func navigate
+                                :address  "AttendantsList"
+                                :params   {:day day}}}))))
+
 (reg-event-db :process-response
               (fn [db [_ db-key response]]
                 (if (contains? response :errors)
@@ -52,7 +61,7 @@
 (reg-event-fx :list-attendants
               (fn [_ [_ day navigate]]
                 {:dispatch [::api-get :attendants (str "attendances/" day)]
-                 :navigate {:nav-func navigate :address "AttendantsList" :params (clj->js {:day day})}}))
+                 :navigate {:nav-func navigate :address "AttendantsList" :params {:day day}}}))
 
 (reg-event-fx :list-attendances-days
               (fn [_ [_ navigate]]
