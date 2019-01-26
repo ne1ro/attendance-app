@@ -26,8 +26,9 @@
 
 (def routes {:Login               {:screen            (r/reactify-component login-screen)
                                    :navigationOptions {:header nil}}
-             :AttendantsList      {:screen            (r/reactify-component list-attendants)
-                                   :navigationOptions {:title "This day attendants"}}
+             :AttendantsList      {:screen (r/reactify-component list-attendants)
+                                   :navigationOptions
+                                           {:title "This day attendants" :drawerLabel "Home" :headerLeft nil}}
              :Attendant           {:screen            (r/reactify-component attendant)
                                    :navigationOptions {:title "Attendant"}}
              :AttendancesCalendar {:screen            (r/reactify-component attendances-calendar)

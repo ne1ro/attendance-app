@@ -55,7 +55,9 @@
 (defn list-attendants [{navigation :navigation}]
   (let [attendants (subscribe [:list-attendants])
         day (.getParam navigation "day" "2019-01-01")
-        title (->> day (format/parse (format/formatter "yyyy-MM-dd")) (format-day "E d 'of' MMMM"))
+        title (->> day
+                   (format/parse (format/formatter "yyyy-MM-dd"))
+                   (format-day "E d 'of' MMMM"))
         navigate (.-navigate navigation)]
 
     [view {:style (:container styles)}
@@ -68,7 +70,9 @@
         [text {:style (-> styles :subheading (assoc :padding-top 15))}
          "Would you like to add someone?"]]
 
-       [view [text {:style (:display1 styles)} title]
+       [view
+        [touchable-feedback {:on-press #(dispatch [:list-attendances-days navigate])}
+         [text {:style (:display1 styles)} title]]
 
         [flat-list
          {:data          @attendants

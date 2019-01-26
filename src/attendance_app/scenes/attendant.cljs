@@ -8,6 +8,8 @@
 (def text (r/adapt-react-class (.-Text ReactNative)))
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def typography (.-material (js/require "react-native-typography")))
+(def bg (js/require "./images/bg.jpg"))
+(def image-background (r/adapt-react-class (.-ImageBackground ReactNative)))
 
 (def styles
   {:display1       (-> typography .-display1 ->clj (assoc :text-align "center" :color (:white colors)))
@@ -34,7 +36,10 @@
     (if @attendant
       [view {:style (:container styles)}
        [view {:style (:header styles)}
-        [text {:style (:display1 styles)} (str (:firstName @attendant) " " (:lastName @attendant))]]
+        [image-background {:source bg
+                           :style  {:width "100%" :height "100%" :align-items "center" :justify-content "center"}}
+         [text {:style (:display1 styles)}
+          (str (:firstName @attendant) " " (:lastName @attendant))]]]
 
        [view {:style (:footer styles)}
         [view {:style (:cell styles)}
@@ -42,7 +47,8 @@
          [field-cell "Last name" (:lastName @attendant)]]
 
         [view {:style (:cell styles)}
-         [field-cell "Attendance percentage" (str (:attendancePercentage @attendant) "%")]
+         [field-cell "Attendance percentage"
+          (-> @attendant :attendancePercentage Math.floor int (str "%"))]
          [field-cell "Total attendances" (:attendancesCount @attendant)]
          [field-cell "Total days" (:daysCount @attendant)]]]]
 
