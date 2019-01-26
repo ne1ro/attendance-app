@@ -30,10 +30,8 @@
 
 (defn login-screen [{navigation :navigation}]
   (let [navigate (.-navigate navigation)]
-    (dispatch [:check-access-token navigate])
-
     [image-background {:style (:container styles) :source bg}
      [text {:style (:title styles)} "Please enter your Access Code"]
      [text-edit {:placeholder    ""
                  :tint-color     (:secondary-text colors)
-                 :on-text-change #(dispatch [:set-access-token %])}]]))
+                 :on-text-change #(dispatch [:set-access-token % navigate])}]]))

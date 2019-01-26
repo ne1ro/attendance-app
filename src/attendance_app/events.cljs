@@ -1,10 +1,11 @@
 (ns attendance-app.events
   (:require
-    [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
-    [clojure.spec.alpha :as s]
-    [attendance-app.effects]
-    [attendance-app.utils :refer [current-day]]
-    [attendance-app.db :as db :refer [app-db]]))
+   [re-frame.core :refer [reg-event-db after dispatch reg-event-fx]]
+   [re-frame-fx.dispatch]
+   [clojure.spec.alpha :as s]
+   [attendance-app.effects]
+   [attendance-app.utils :refer [current-day]]
+   [attendance-app.db :as db :refer [app-db]]))
 
 ; TODO: get from config
 (def host "http://10.0.2.2:3000/")
@@ -34,16 +35,21 @@
               (fn [{db :db} [_ navigate]]
                 (when (-> db :token empty? not)
                   (let [day (current-day "yyyy-MM-dd")]
-                    {:dispatch [:list-attendants day]
-                     :navigate {:nav-func navigate
-                                :address  "AttendantsList"
-                                :params   {:day day}}}))))
+                    {:dispatch [:list-attendants day navigate]}))))
+
+(reg-event-fx :set-access-token
+              (fn [{db :db} [_ value navigate]]
+                {:db (assoc db :token value)
+                 :dispatch-debounce
+                 [{:timeout 750
+                   :action  :dispatch
+                   :event   [::api-get "attendances_days" #(dispatch [:check-access-token navigate])]}]}))
 
 (reg-event-db :process-response
               (fn [db [_ db-key response]]
                 (if (contains? response :errors)
                   (dispatch [:show-error (:errors response)]))
-                (-> db (assoc db-key response) (assoc :loading? false))))
+                (assoc db db-key response :loading? false)))
 
 (reg-event-fx :show-error (fn [_db [_ msg]] {:alert {:message msg :title "Request Error"}}))
 
@@ -51,8 +57,7 @@
               (fn [{db :db} [_ navigate]]
                 (let [{:keys [attendant-first-name attendant-last-name]} db
                       on-success #(doseq [event [[:process-response :attendant-form %]
-                                                 [:list-attendants (current-day "yyyy-MM-dd")]
-                                                 [:navigate navigate "AttendantsList"]]]
+                                                 [:list-attendants (current-day "yyyy-MM-dd") navigate]]]
                                     (dispatch event))
                       attendant-form {:firstName attendant-first-name :lastName attendant-last-name}]
                   {:dispatch [::api-post "attendants" attendant-form on-success]
@@ -60,17 +65,22 @@
 
 (reg-event-fx :list-attendants
               (fn [_ [_ day navigate]]
-                {:dispatch [::api-get :attendants (str "attendances/" day)]
-                 :navigate {:nav-func navigate :address "AttendantsList" :params {:day day}}}))
+                {:dispatch
+                 [::api-get (str "attendances/" day) #(dispatch [:process-response :attendants %])]
+                 :navigate
+                 {:nav-func navigate :address "AttendantsList" :params {:day day}}}))
 
 (reg-event-fx :list-attendances-days
               (fn [_ [_ navigate]]
-                {:dispatch [::api-get :attendances-days "attendances_days"]
-                 :navigate {:nav-func navigate :address "AttendancesCalendar"}}))
+                {:dispatch
+                 [::api-get "attendances_days" #(dispatch [:process-response :attendances-days %])]
+                 :navigate
+                 {:nav-func navigate :address "AttendancesCalendar"}}))
 
 (reg-event-fx :get-attendant
               (fn [_ [_ navigate id]]
-                {:dispatch-n [[:navigate navigate "Attendant"] [::api-get :attendant (str "attendants/" id)]]}))
+                {:dispatch-n [[:navigate navigate "Attendant"]
+                              [::api-get (str "attendants/" id) #(dispatch [:process-response :attendant %])]]}))
 
 (reg-event-db :set-attendant-first-name
               (fn [db [_ value]] (assoc db :attendant-first-name value)))
@@ -107,12 +117,14 @@
                      :db       (update db :attendants update-status)}))))
 
 (reg-event-fx :navigate
-              (fn [_db [_ navigate address]] {:navigate {:nav-func navigate :address address}}))
+              (fn [_db [_ navigate address]]
+                {:navigate {:nav-func navigate :address address}}))
 
 (reg-event-fx ::api-get
-              (fn [{db :db} [_ db-key url]]
+              (fn [{db :db} [_ url on-success]]
                 {:fetch {:url        (str host url)
-                         :on-success #(dispatch [:process-response db-key %])
+                         :token      (:token db)
+                         :on-success on-success
                          :on-failure #(dispatch [:show-error %])}
                  :db    (assoc db :loading? true)}))
 
@@ -121,13 +133,15 @@
                 {:fetch {:method     "POST"
                          :url        (str host url)
                          :body       (.stringify js/JSON (clj->js body))
+                         :token      (:token db)
                          :on-success on-success
                          :on-failure #(dispatch [:show-error %])}
                  :db    (assoc db :loading? true)}))
 
 (reg-event-fx ::api-delete
-              (fn [_ [_ url on-success]]
+              (fn [{db :db} [_ url on-success]]
                 {:fetch {:method     "DELETE"
                          :url        (str host url)
                          :on-success on-success
+                         :token      (:token db)
                          :on-failure #(dispatch [:show-error %])}}))

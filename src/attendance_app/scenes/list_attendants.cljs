@@ -27,7 +27,7 @@
    :fab           {:font-size 28 :font-weight "400" :color "#FFF"}
    :attendant-row {:flex-direction "row" :padding-horizontal 15 :padding-vertical 15}
    :dot-container {:flex-direction     "column"
-                   :flex               0.2
+                   :flex               0.15
                    :align-items        "flex-end"
                    :justify-content    "center"
                    :padding-horizontal 8}})
@@ -49,7 +49,7 @@
    [touchable-feedback
     {:on-press      #(dispatch [:toggle-attendance attendant day])
      :on-long-press #(dispatch [:get-attendant navigate id])}
-    [view {:style {:flex-direction "column" :flex 0.8}}
+    [view {:style {:flex-direction "column" :flex 0.85}}
      [text {:style (:headline styles)} (str lastName " " firstName)]]]])
 
 (defn list-attendants [{navigation :navigation}]
@@ -62,7 +62,7 @@
      (let [floating-action-button (fab #(dispatch [:navigate navigate "AttendantForm"]))]
        [floating-action-button [text {:style (:fab styles)} "+"]])
 
-     (if (seq @attendants)
+     (if (empty? @attendants)
        [view
         [text {:style (:title styles)} "There is no one to attend :("]
         [text {:style (-> styles :subheading (assoc :padding-top 15))}

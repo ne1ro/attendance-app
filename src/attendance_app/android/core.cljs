@@ -47,4 +47,5 @@
 
 (defn init []
   (dispatch-sync [:initialize-db])
+  (dispatch-sync [:check-access-token prn])
   (.registerComponent app-registry "AttendanceApp" (r/reactify-component app-root)))
