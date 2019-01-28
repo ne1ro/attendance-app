@@ -71,3 +71,4 @@ figwheel_server.log
 .lein-repl-history
 nashorn*
 .nrepl-port
+pom.xml
