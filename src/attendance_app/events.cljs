@@ -8,7 +8,7 @@
    [attendance-app.db :as db :refer [app-db]]))
 
 ; TODO: get from config
-(def host "https://neiro.io/attendance_api/")
+(def host "https://neiro.io/attendance-api/")
 
 (defn- eq-id? [id1 {id2 :id}] (= id1 id2))
 
