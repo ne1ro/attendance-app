@@ -2,6 +2,8 @@
 
 Attendance Mobile Application built in Clojure
 
+![](docs/1.png)
+
 [![Build Status](https://travis-ci.org/ne1ro/attendance-app.svg?branch=master)](https://travis-ci.org/ne1ro/attendance-app)
 
 ## Usage
@@ -28,6 +30,12 @@ cljs.user=> re-frame.db/app-db
 ```
 (in-ns 'attendance-app.android.core)
 ```
+
+## More images
+
+![](docs/2.png)
+![](docs/3.png)
+![](docs/4.png)
 
 ## License
 
