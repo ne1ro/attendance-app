@@ -4,6 +4,7 @@
   ],
   "ignore": [
     "./index.ios.js",
-    "./index.android.js"
+    "./node_modules/create-react-class/*",
+    "./node_modules/react-proxy/*"
   ]
 }

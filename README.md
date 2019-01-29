@@ -31,6 +31,11 @@ cljs.user=> re-frame.db/app-db
 (in-ns 'attendance-app.android.core)
 ```
 
+## Release build
+```bash
+re-natal use-figwheel && lein prod-build && react-native run-android --variant=release
+```
+
 ## More images
 
 ![](docs/2.png)
