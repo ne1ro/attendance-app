@@ -3,8 +3,6 @@
     "module:metro-react-native-babel-preset"
   ],
   "ignore": [
-    "./index.ios.js",
-    "./node_modules/create-react-class/*",
-    "./node_modules/react-proxy/*"
+    "index.android.js"
   ]
 }
