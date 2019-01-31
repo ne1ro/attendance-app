@@ -35,6 +35,7 @@
                                                                 :main          "env.ios.main"
                                                                 :output-dir    "target/ios"
                                                                 :optimizations :none
+                                                                :cache-analysis true
                                                                 :target        :nodejs}}
                                                 {:id           "android"
                                                  :source-paths ["src" "env/dev"]
@@ -43,6 +44,7 @@
                                                                 :main          "env.android.main"
                                                                 :output-dir    "target/android"
                                                                 :optimizations :none
+                                                                :cache-analysis true
                                                                 :target        :nodejs}}
                                                 #_($DEV_PROFILES$)]}}
              :prod     {:cljsbuild {:builds [{:id           "ios"
@@ -62,8 +64,18 @@
                                                              :output-dir         "target/android"
                                                              :static-fns         true
                                                              :optimize-constants true
+                                                             :fn-invoke-direct true
+                                                             :warnings true
+                                                             :pseudo-names true
+                                                             :print-input-delimiter true
+                                                             :rewrite-polyfills true
+                                                             :infer-externs true
                                                              :optimizations      :simple
+                                                             :verbose true
                                                              :target             :nodejs
+                                                             :language-in :es-next
+                                                             :language-out :no-transpile
+                                                             :parallel-build true
                                                              :closure-defines    {"goog.DEBUG" false}}}
                                              #_($PROD_PROFILES$)]}}
              :advanced {:dependencies [[react-native-externs "0.2.0"]]
@@ -86,5 +98,15 @@
                                                                 :optimize-constants true
                                                                 :optimizations      :advanced
                                                                 :target             :nodejs
+                                                               :fn-invoke-direct true
+                                                               :warnings true
+                                                               :pseudo-names true
+                                                               :print-input-delimiter true
+                                                               :rewrite-polyfills true
+                                                               :infer-externs true
+                                                               :verbose true
+                                                               :language-in :es-next
+                                                               :language-out :no-transpile
+                                                               :parallel-build true
                                                                 :closure-defines    {"goog.DEBUG" false}}}
                                                 #_($ADVANCED_PROFILES$)]}}})
