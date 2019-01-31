@@ -72,6 +72,10 @@ import com.android.build.OutputFile
  * ]
  */
 
+project.ext.react = [
+  nodeExecutableAndArgs: ["node", "--max-old-space-size=8192"]
+]
+
 
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -116,6 +120,7 @@ android {
             }
         }
     }
+
     splits {
         abi {
             reset()

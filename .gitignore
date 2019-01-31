@@ -73,3 +73,5 @@ figwheel_server.log
 nashorn*
 .nrepl-port
 pom.xml
+*.keystore
+android/gradle.properties

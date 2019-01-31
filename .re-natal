@@ -10,7 +10,12 @@
     "react-native-material-kit",
     "react-navigation",
     "react-native-swipe-gestures",
-    "react-native-calendars"
+    "react-native-calendars",
+    "react-native-calendars",
+    "react-gesture-handler",
+    "react-native-swipe-gestures",
+    "react-native-typography",
+    "react-native-navigation"
   ],
   "imageDirs": [
     "images"

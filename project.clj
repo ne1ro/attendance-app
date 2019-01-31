@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.339"]
+                 [org.clojure/clojurescript "1.10.516"]
                  [com.bhauman/rebel-readline "0.1.4"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.7theta/re-frame-fx "0.2.1"]
