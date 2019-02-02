@@ -1,5 +1,6 @@
 {
   "presets": [
     "module:metro-react-native-babel-preset"
-  ]
+  ],
+  "ignores": ["index.android.js"]
 }
