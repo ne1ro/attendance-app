@@ -8,8 +8,11 @@
                  [com.bhauman/rebel-readline "0.1.4"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.7theta/re-frame-fx "0.2.1"]
-                 [reagent "0.8.1" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
+                 [com.github.reagent-project/reagent
+                  "5dd12c7a2248a3f7d8fafccf2eb61ddcf89dafc3"
+                  :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
                  [re-frame "0.10.6"]]
+  :repositories [["jitpack" "https://jitpack.io"]]
   :plugins [[lein-cljsbuild "1.1.4"]
             [lein-cljfmt "0.6.3"]
             [lein-kibit "0.1.6"]
