@@ -4,13 +4,11 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.516"]
+                 [org.clojure/clojurescript "1.10.339"]
                  [com.bhauman/rebel-readline "0.1.4"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.7theta/re-frame-fx "0.2.1"]
-                 [com.github.reagent-project/reagent
-                  "5dd12c7a2248a3f7d8fafccf2eb61ddcf89dafc3"
-                  :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
+                 [reagent "0.8.1" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
                  [re-frame "0.10.6"]]
   :repositories [["jitpack" "https://jitpack.io"]]
   :plugins [[lein-cljsbuild "1.1.4"]
