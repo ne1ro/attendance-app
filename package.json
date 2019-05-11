@@ -12,21 +12,21 @@
   },
   "dependencies": {
     "@babel/plugin-external-helpers": "^7.0.0",
-    "fsevents": "^1.2.7",
-    "metro": "^0.48.5",
-    "react": "16.6.1",
-    "react-native": "0.57.7",
-    "react-native-calendars": "^1.22.0",
-    "react-native-gesture-handler": "^1.0.15",
+    "fsevents": "^1.2.9",
+    "metro": "^0.54.0",
+    "react": "16.8.6",
+    "react-native": "^0.59.8",
+    "react-native-calendars": "^1.112.0",
+    "react-native-gesture-handler": "^1.2.1",
     "react-native-material-kit": "^0.5.1",
     "react-native-swipe-gestures": "^1.0.3",
     "react-native-typography": "^1.4.0",
-    "react-navigation": "^3.1.2"
+    "react-navigation": "3.9.1"
   },
   "devDependencies": {
-    "babel-jest": "23.6.0",
-    "jest": "23.6.0",
-    "metro-react-native-babel-preset": "0.45.4",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "0.54.0",
     "react-test-renderer": "16.6.1"
   },
   "jest": {

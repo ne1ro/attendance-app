@@ -224,7 +224,13 @@ function loadApp(platform, devHost, onLoadCb) {
             shimBaseGoog(fileBasePath);
             importJs(fileBasePath + '/cljs_deps.js', function () {
                 importJs(fileBasePath + '/goog/deps.js', function () {
-                    importIndexJs(fileBasePath);
+                    // This is needed because of RN packager
+                    // seriously React packager? why.
+                    var googreq = goog.require;	
+                    googreq(`env.${platform}.main`);
+
+                    // Hot reloading Works for figwheel 0.5.14, but not 0.5.18 -- why?
+                    // importIndexJs(fileBasePath);                    
                 });
             });
         });
